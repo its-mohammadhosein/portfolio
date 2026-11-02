@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react'
 
-import type { Page } from '@/payload-types'
+import type { AnimationSettings, Page } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { Section } from '@/components/ui/section'
+import { animAttributes } from '@/motion/attributes'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -14,6 +16,14 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+}
+
+// Dyson blocks lay out their own spacing; template blocks keep their original vertical rhythm
+const templateBlocks = new Set(['archive', 'content', 'cta', 'formBlock', 'mediaBlock'])
+
+type StyledBlock = {
+  theme?: 'light' | 'dark' | null
+  animation?: AnimationSettings | null
 }
 
 export const RenderBlocks: React.FC<{
@@ -34,11 +44,18 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType as keyof typeof blockComponents]
 
             if (Block) {
+              const { animation, theme } = block as StyledBlock
               return (
-                <div className="my-16" key={index}>
+                <Section
+                  className={templateBlocks.has(blockType) ? 'py-16' : undefined}
+                  data-block={blockType}
+                  key={block.id ?? index}
+                  theme={theme ?? 'light'}
+                  {...animAttributes(animation)}
+                >
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
-                </div>
+                </Section>
               )
             }
           }
