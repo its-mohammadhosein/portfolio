@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useSyncExternalStore } from 'react'
+import { createPortal } from 'react-dom'
 
 import type { Header as HeaderType } from '@/payload-types'
 
@@ -9,6 +10,8 @@ import { cn } from '@/utilities/ui'
 import { MenuIcon, SearchIcon, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+const noopSubscribe = () => () => {}
 
 /** Nav label that rolls up to a copy of itself on hover (bb-wcf-hover-brandberry). */
 const RollLink: React.FC<{
@@ -43,6 +46,13 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  // The drawer is portalled to <body>: fixed elements inside ScrollSmoother's transformed
+  // #smooth-content would scroll with the page. Rendered after mount only (no SSR mismatch).
+  const mounted = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  )
 
   // Close the drawer when the route changes
   const [lastPath, setLastPath] = useState(pathname)
@@ -96,43 +106,53 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         <MenuIcon aria-hidden className="size-[1em]" />
       </button>
 
-      <div
-        aria-hidden
-        className={cn(
-          'fixed inset-0 z-[1000] bg-black/50 transition-opacity duration-[400ms] min-[1025px]:hidden',
-          open ? 'opacity-100' : 'pointer-events-none opacity-0',
-        )}
-        onClick={() => setOpen(false)}
-      />
-      <div
-        aria-label="Menu"
-        aria-modal="true"
-        className={cn(
-          'fixed top-0 bottom-0 left-0 z-[1001] flex h-dvh w-[60%] flex-col overflow-y-auto bg-ink text-paper transition-[transform,opacity,visibility] duration-[450ms] md:w-[250px] min-[1025px]:hidden',
-          open ? 'visible translate-x-0 opacity-100' : 'invisible -translate-x-full opacity-0',
-        )}
-        id="mobile-menu"
-        role="dialog"
-      >
-        <button
-          className="m-[10px] ml-auto flex min-h-10 min-w-10 items-center justify-center self-end rounded-full border border-[#555] text-[20px]"
-          onClick={() => setOpen(false)}
-          type="button"
-        >
-          <span className="sr-only">Close menu</span>
-          <XIcon aria-hidden className="size-[1em]" />
-        </button>
-        <ul className="flex flex-col">
-          {[...navItems, { href: '/search', label: 'Search', newTab: false }].map((item, i) => (
-            <li
-              className="font-display text-[1.35rem] leading-[1.15] font-semibold tracking-[-0.02px] md:text-[1.25rem] md:leading-[1.5] md:tracking-[-0.01em]"
-              key={i}
+      {mounted &&
+        createPortal(
+          <>
+            <div
+              aria-hidden
+              className={cn(
+                'fixed inset-0 z-[1000] bg-black/50 transition-opacity duration-[400ms] min-[1025px]:hidden',
+                open ? 'opacity-100' : 'pointer-events-none opacity-0',
+              )}
+              onClick={() => setOpen(false)}
+            />
+            <div
+              aria-label="Menu"
+              aria-modal="true"
+              className={cn(
+                'fixed top-0 bottom-0 left-0 z-[1001] flex h-dvh w-[60%] flex-col overflow-y-auto bg-ink text-paper transition-[transform,opacity,visibility] duration-[450ms] md:w-[250px] min-[1025px]:hidden',
+                open
+                  ? 'visible translate-x-0 opacity-100'
+                  : 'invisible -translate-x-full opacity-0',
+              )}
+              id="mobile-menu"
+              role="dialog"
             >
-              <RollLink {...item} className="pt-[15px] pl-[20px] md:pt-0" />
-            </li>
-          ))}
-        </ul>
-      </div>
+              <button
+                className="m-[10px] ml-auto flex min-h-10 min-w-10 items-center justify-center self-end rounded-full border border-[#555] text-[20px]"
+                onClick={() => setOpen(false)}
+                type="button"
+              >
+                <span className="sr-only">Close menu</span>
+                <XIcon aria-hidden className="size-[1em]" />
+              </button>
+              <ul className="flex flex-col">
+                {[...navItems, { href: '/search', label: 'Search', newTab: false }].map(
+                  (item, i) => (
+                    <li
+                      className="font-display text-[1.35rem] leading-[1.15] font-semibold tracking-[-0.02px] md:text-[1.25rem] md:leading-[1.5] md:tracking-[-0.01em]"
+                      key={i}
+                    >
+                      <RollLink {...item} className="pt-[15px] pl-[20px] md:pt-0" />
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          </>,
+          document.body,
+        )}
     </nav>
   )
 }

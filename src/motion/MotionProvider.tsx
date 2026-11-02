@@ -3,23 +3,36 @@
 import { usePathname } from 'next/navigation'
 import React, { useEffect } from 'react'
 
-import { startMotion } from './engine'
+import { startMotion as startNative } from './engine'
 
-/** Starts the motion engine after each route change (client navigation swaps the page content). */
-export const MotionProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+/**
+ * Starts the motion engine after each route change (client navigation swaps the page content).
+ * GSAP (ScrollSmoother, ScrollTrigger, SplitText) is loaded on demand; if it fails to load, the
+ * native engine runs the same `data-anim` markup.
+ */
+export const MotionProvider: React.FC<{ children?: React.ReactNode; smooth?: boolean }> = ({
+  children,
+  smooth = true,
+}) => {
   const pathname = usePathname()
 
   useEffect(() => {
     let stop = () => {}
-    // Wait a frame so the new route's DOM is in place
-    const frame = requestAnimationFrame(() => {
-      stop = startMotion()
-    })
+    let cancelled = false
+    import('./engine-gsap')
+      .then(({ startMotion }) => {
+        if (!cancelled) stop = startMotion({ smooth })
+      })
+      .catch((error) => {
+        // Only reached if GSAP fails to load or start; keep the page animated with the native engine
+        console.error('[motion] GSAP engine failed, falling back to the native engine', error)
+        if (!cancelled) stop = startNative()
+      })
     return () => {
-      cancelAnimationFrame(frame)
+      cancelled = true
       stop()
     }
-  }, [pathname])
+  }, [pathname, smooth])
 
   return <>{children}</>
 }

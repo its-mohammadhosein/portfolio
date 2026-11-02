@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { CMSLink } from '@/components/Link'
-import { BackToTop, ScrollToTop } from '@/components/ScrollToTop'
+import { BackToTop } from '@/components/ScrollToTop'
 import { TitleMarkup, titleLines } from '@/components/TitleMarkup'
 import { FlipButton } from '@/components/ui/flip-button'
 import { getLinkHref } from '@/utilities/getLinkHref'
@@ -79,8 +79,6 @@ export async function Footer() {
           ))}
         </nav>
       </div>
-
-      {settings.scrollToTop && <ScrollToTop />}
     </footer>
   )
 }

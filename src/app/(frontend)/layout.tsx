@@ -12,6 +12,8 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { InitMotion } from '@/motion/InitMotion'
 import { MotionProvider } from '@/motion/MotionProvider'
+import { ScrollToTop } from '@/components/ScrollToTop'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
@@ -35,6 +37,7 @@ const inter = Inter({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
+  const settings = await getCachedGlobal('site-settings', 0)()
 
   return (
     <html
@@ -50,16 +53,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          />
-
-          <MotionProvider>
-            <Header />
-            {children}
-            <Footer />
+          <MotionProvider smooth={settings.smoothScroll ?? true}>
+            {/* ScrollSmoother moves #smooth-content; fixed UI (scroll-to-top, mobile drawer via portal) stays outside */}
+            <div id="smooth-wrapper">
+              <div className="flex min-h-screen flex-col" id="smooth-content">
+                <AdminBar
+                  adminBarProps={{
+                    preview: isEnabled,
+                  }}
+                />
+                <Header />
+                {children}
+                <Footer />
+              </div>
+            </div>
+            {settings.scrollToTop && <ScrollToTop />}
           </MotionProvider>
         </Providers>
       </body>

@@ -34,7 +34,10 @@ export const FeatureListBlock: React.FC<FeatureListBlockProps> = ({
     <div className="relative min-h-screen overflow-hidden bg-ink pt-4 pb-16 md:p-0">
       {label && (
         <div aria-hidden className="absolute inset-0">
-          <div className={cn('h-screen pt-[5rem] md:pt-[15rem]', pinned && 'sticky top-0')}>
+          <div
+            className={cn('h-screen pt-[5rem] md:pt-[15rem]', pinned && 'sticky top-0')}
+            {...(pinned ? { 'data-pin': '' } : {})}
+          >
             <Marquee
               gap={50}
               itemClassName="font-display text-[19vw] font-normal uppercase leading-[0.8] tracking-[-0.02em] text-paper md:text-[16.875vw]"
