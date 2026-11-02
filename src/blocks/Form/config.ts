@@ -7,10 +7,15 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { blockStyle } from '@/fields/blockStyle'
+import { displayTitle } from '@/fields/displayTitle'
+
 export const FormBlock: Block = {
   slug: 'formBlock',
   interfaceName: 'FormBlock',
   fields: [
+    // Dyson: title beside the form, e.g. "I'd love to⏎hear from you"
+    displayTitle('title'),
     {
       name: 'form',
       type: 'relationship',
@@ -40,6 +45,7 @@ export const FormBlock: Block = {
       }),
       label: 'Intro Content',
     },
+    blockStyle({ preset: 'fade-up' }),
   ],
   graphQL: {
     singularName: 'FormBlock',

@@ -7,6 +7,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { blockStyle } from '@/fields/blockStyle'
 import { linkGroup } from '../../fields/linkGroup'
 
 export const CallToAction: Block = {
@@ -29,11 +30,12 @@ export const CallToAction: Block = {
       label: false,
     },
     linkGroup({
-      appearances: ['default', 'outline'],
+      appearances: ['default', 'outline', 'pill', 'underline'],
       overrides: {
         maxRows: 2,
       },
     }),
+    blockStyle({ preset: 'fade-up' }),
   ],
   labels: {
     plural: 'Calls to Action',

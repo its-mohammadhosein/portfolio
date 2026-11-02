@@ -4,9 +4,18 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
+import { ContactInfo } from '../../blocks/ContactInfo/config'
 import { Content } from '../../blocks/Content/config'
+import { DataTable } from '../../blocks/DataTable/config'
+import { FeatureList } from '../../blocks/FeatureList/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { HeroDisplay } from '../../blocks/HeroDisplay/config'
+import { LabeledLists } from '../../blocks/LabeledLists/config'
+import { Marquee } from '../../blocks/Marquee/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { PageTitle } from '../../blocks/PageTitle/config'
+import { PortfolioGrid } from '../../blocks/PortfolioGrid/config'
+import { Statement } from '../../blocks/Statement/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -72,7 +81,24 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                // Dyson blocks
+                HeroDisplay,
+                PageTitle,
+                Statement,
+                Marquee,
+                PortfolioGrid,
+                FeatureList,
+                DataTable,
+                LabeledLists,
+                ContactInfo,
+                // Template blocks
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

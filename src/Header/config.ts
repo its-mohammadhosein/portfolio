@@ -10,6 +10,30 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Falls back to the template logo when empty.',
+      },
+    },
+    {
+      name: 'availability',
+      type: 'group',
+      admin: {
+        description: 'Status badge next to the logo, e.g. "Available May 2026".',
+      },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'enabled', type: 'checkbox', defaultValue: true, admin: { width: '30%' } },
+            { name: 'text', type: 'text', admin: { width: '70%' } },
+          ],
+        },
+      ],
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [

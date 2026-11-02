@@ -7,6 +7,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
+import { blockStyle } from '@/fields/blockStyle'
 import { link } from '@/fields/link'
 
 const columnFields: Field[] = [
@@ -75,5 +76,6 @@ export const Content: Block = {
       },
       fields: columnFields,
     },
+    blockStyle({ preset: 'fade-up' }),
   ],
 }

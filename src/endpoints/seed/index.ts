@@ -20,7 +20,8 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+// Only the globals with `navItems`; site-settings isn't touched by this demo seed
+const globals: Extract<GlobalSlug, 'header' | 'footer'>[] = ['header', 'footer']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 

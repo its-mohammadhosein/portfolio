@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    projects: Project;
     media: Media;
     categories: Category;
     users: User;
@@ -91,6 +92,7 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -112,10 +114,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -188,6 +192,10 @@ export interface Page {
               | ({
                   relationTo: 'posts';
                   value: number | Post;
+                } | null)
+              | ({
+                  relationTo: 'projects';
+                  value: number | Project;
                 } | null);
             url?: string | null;
             label: string;
@@ -201,7 +209,22 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | HeroDisplayBlock
+    | PageTitleBlock
+    | StatementBlock
+    | MarqueeBlock
+    | PortfolioGridBlock
+    | FeatureListBlock
+    | DataTableBlock
+    | LabeledListsBlock
+    | ContactInfoBlock
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -442,6 +465,425 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  /**
+   * Title as shown on the project page, e.g. "The First⏎Brand". Falls back to the title. *text* = italic, ==text== = red.
+   */
+  heroTitle?: string | null;
+  heroImage: number | Media;
+  /**
+   * Card image used in portfolio grids.
+   */
+  cover: number | Media;
+  /**
+   * Marquee word above the overview.
+   */
+  overviewLabel?: string | null;
+  overview?: string | null;
+  year?: string | null;
+  client?: string | null;
+  services?: string | null;
+  /**
+   * Shown as the "View Online" button when set.
+   */
+  liveUrl?: string | null;
+  /**
+   * Full-width images below the overview, in order.
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        /**
+         * Parallax speed (1 = none)
+         */
+        speed?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * One line per row. *text* = italic letter(s), ==text== = red highlight.
+   */
+  moreTitle?: string | null;
+  /**
+   * Leave empty to show the next two projects.
+   */
+  moreProjects?: (number | Project)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  categories?: (number | Category)[] | null;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroDisplayBlock".
+ */
+export interface HeroDisplayBlock {
+  /**
+   * One line per row, e.g. "R*i*cky⏎Dyson". *text* = italic, ==text== = red.
+   */
+  title: string;
+  image?: (number | null) | Media;
+  /**
+   * Parallax speed (1 = none)
+   */
+  imageSpeed?: number | null;
+  /**
+   * Short words around the title, e.g. Artist / Designer / Creator.
+   */
+  roles?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown in parentheses, e.g. "Scroll to explore".
+   */
+  caption?: string | null;
+  /**
+   * Social icons from Site Settings.
+   */
+  showSocials?: boolean | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'heroDisplay';
+}
+/**
+ * Entrance animation. Leave delay/duration empty to use the preset defaults.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AnimationSettings".
+ */
+export interface AnimationSettings {
+  preset?: ('none' | 'text-reveal' | 'chars' | 'fade' | 'fade-up' | 'image-reveal' | 'stagger') | null;
+  /**
+   * Seconds
+   */
+  delay?: number | null;
+  /**
+   * Seconds
+   */
+  duration?: number | null;
+  /**
+   * Seconds between items
+   */
+  stagger?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageTitleBlock".
+ */
+export interface PageTitleBlock {
+  /**
+   * One line per row. *text* = italic letter(s), ==text== = red highlight.
+   */
+  title: string;
+  size?: ('xxl' | 'xl' | 'l' | 'm') | null;
+  align?: ('left' | 'center') | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pageTitle';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatementBlock".
+ */
+export interface StatementBlock {
+  /**
+   * Optional label in parentheses above the title.
+   */
+  caption?: string | null;
+  /**
+   * One line per row. *text* = italic letter(s), ==text== = red highlight.
+   */
+  title?: string | null;
+  titleSize?: ('heading' | 'display') | null;
+  text?: string | null;
+  enableLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('underline' | 'pill') | null;
+  };
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'statement';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock".
+ */
+export interface MarqueeBlock {
+  /**
+   * Each row scrolls its own word, e.g. Branding / Development / Design.
+   */
+  rows: {
+    text: string;
+    /**
+     * Scroll right to left
+     */
+    reverse?: boolean | null;
+    id?: string | null;
+  }[];
+  /**
+   * Milliseconds per item (html base: 5000; Benefits 9000)
+   */
+  speed?: number | null;
+  /**
+   * Space between items in px (20 on mobile)
+   */
+  gap?: number | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'marquee';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PortfolioGridBlock".
+ */
+export interface PortfolioGridBlock {
+  /**
+   * One line per row. *text* = italic letter(s), ==text== = red highlight.
+   */
+  title?: string | null;
+  /**
+   * e.g. "Projects of years⏎©2021 — 2025"
+   */
+  intro?: string | null;
+  populateBy?: ('latest' | 'category' | 'selection') | null;
+  categories?: (number | Category)[] | null;
+  projects?: (number | Project)[] | null;
+  limit?: number | null;
+  /**
+   * Category filter tabs (Work page)
+   */
+  showTabs?: boolean | null;
+  enableLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('underline' | 'pill') | null;
+  };
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'portfolioGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureListBlock".
+ */
+export interface FeatureListBlock {
+  /**
+   * Marquee word, e.g. "Benefits"
+   */
+  label?: string | null;
+  /**
+   * Pin the label while items scroll
+   */
+  pinned?: boolean | null;
+  items: {
+    icon?: ('none' | 'creativeExcellence' | 'professionalTeam' | 'collaborativeApproach' | 'onTimeDelivery') | null;
+    title: string;
+    text?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DataTableBlock".
+ */
+export interface DataTableBlock {
+  /**
+   * e.g. "Awards /⏎Recognitions"
+   */
+  title?: string | null;
+  /**
+   * Column labels, shown in parentheses, e.g. Featured by / Award / Year
+   */
+  columns?: {
+    first?: string | null;
+    second?: string | null;
+    third?: string | null;
+  };
+  rows?:
+    | {
+        first: string;
+        second?: string | null;
+        third?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  enableLink?: boolean | null;
+  link?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('underline' | 'pill') | null;
+  };
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'dataTable';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LabeledListsBlock".
+ */
+export interface LabeledListsBlock {
+  lists: {
+    /**
+     * Shown in parentheses, e.g. "Services"
+     */
+    label: string;
+    /**
+     * One entry per line.
+     */
+    entries: string;
+    id?: string | null;
+  }[];
+  /**
+   * Paragraph next to the lists.
+   */
+  text?: string | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'labeledLists';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactInfoBlock".
+ */
+export interface ContactInfoBlock {
+  /**
+   * e.g. "Have a question? Just drop me a line…"
+   */
+  text?: string | null;
+  showEmail?: boolean | null;
+  showPhone?: boolean | null;
+  showSocials?: boolean | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactInfo';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
@@ -473,17 +915,26 @@ export interface CallToActionBlock {
             | ({
                 relationTo: 'posts';
                 value: number | Post;
+              } | null)
+            | ({
+                relationTo: 'projects';
+                value: number | Project;
               } | null);
           url?: string | null;
           label: string;
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline') | null;
+          appearance?: ('default' | 'outline' | 'pill' | 'underline') | null;
         };
         id?: string | null;
       }[]
     | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
@@ -523,6 +974,10 @@ export interface ContentBlock {
             | ({
                 relationTo: 'posts';
                 value: number | Post;
+              } | null)
+            | ({
+                relationTo: 'projects';
+                value: number | Project;
               } | null);
           url?: string | null;
           label: string;
@@ -534,6 +989,11 @@ export interface ContentBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
   id?: string | null;
   blockName?: string | null;
   blockType: 'content';
@@ -544,6 +1004,16 @@ export interface ContentBlock {
  */
 export interface MediaBlock {
   media: number | Media;
+  width?: ('container' | 'full') | null;
+  /**
+   * Parallax speed, e.g. 0.9 (empty = none)
+   */
+  speed?: number | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -587,6 +1057,10 @@ export interface ArchiveBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
+  /**
+   * One line per row. *text* = italic letter(s), ==text== = red highlight.
+   */
+  title?: string | null;
   form: number | Form;
   enableIntro?: boolean | null;
   introContent?: {
@@ -604,6 +1078,11 @@ export interface FormBlock {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Section background
+   */
+  theme?: ('light' | 'dark') | null;
+  animation?: AnimationSettings;
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -793,6 +1272,10 @@ export interface Redirect {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
         } | null);
     url?: string | null;
   };
@@ -972,6 +1455,10 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -1076,6 +1563,15 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        heroDisplay?: T | HeroDisplayBlockSelect<T>;
+        pageTitle?: T | PageTitleBlockSelect<T>;
+        statement?: T | StatementBlockSelect<T>;
+        marquee?: T | MarqueeBlockSelect<T>;
+        portfolioGrid?: T | PortfolioGridBlockSelect<T>;
+        featureList?: T | FeatureListBlockSelect<T>;
+        dataTable?: T | DataTableBlockSelect<T>;
+        labeledLists?: T | LabeledListsBlockSelect<T>;
+        contactInfo?: T | ContactInfoBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1098,6 +1594,210 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroDisplayBlock_select".
+ */
+export interface HeroDisplayBlockSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  imageSpeed?: T;
+  roles?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  caption?: T;
+  showSocials?: T;
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AnimationSettings_select".
+ */
+export interface AnimationSettingsSelect<T extends boolean = true> {
+  preset?: T;
+  delay?: T;
+  duration?: T;
+  stagger?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageTitleBlock_select".
+ */
+export interface PageTitleBlockSelect<T extends boolean = true> {
+  title?: T;
+  size?: T;
+  align?: T;
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatementBlock_select".
+ */
+export interface StatementBlockSelect<T extends boolean = true> {
+  caption?: T;
+  title?: T;
+  titleSize?: T;
+  text?: T;
+  enableLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock_select".
+ */
+export interface MarqueeBlockSelect<T extends boolean = true> {
+  rows?:
+    | T
+    | {
+        text?: T;
+        reverse?: T;
+        id?: T;
+      };
+  speed?: T;
+  gap?: T;
+  theme?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PortfolioGridBlock_select".
+ */
+export interface PortfolioGridBlockSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  populateBy?: T;
+  categories?: T;
+  projects?: T;
+  limit?: T;
+  showTabs?: T;
+  enableLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureListBlock_select".
+ */
+export interface FeatureListBlockSelect<T extends boolean = true> {
+  label?: T;
+  pinned?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DataTableBlock_select".
+ */
+export interface DataTableBlockSelect<T extends boolean = true> {
+  title?: T;
+  columns?:
+    | T
+    | {
+        first?: T;
+        second?: T;
+        third?: T;
+      };
+  rows?:
+    | T
+    | {
+        first?: T;
+        second?: T;
+        third?: T;
+        id?: T;
+      };
+  enableLink?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LabeledListsBlock_select".
+ */
+export interface LabeledListsBlockSelect<T extends boolean = true> {
+  lists?:
+    | T
+    | {
+        label?: T;
+        entries?: T;
+        id?: T;
+      };
+  text?: T;
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactInfoBlock_select".
+ */
+export interface ContactInfoBlockSelect<T extends boolean = true> {
+  text?: T;
+  showEmail?: T;
+  showPhone?: T;
+  showSocials?: T;
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock_select".
  */
 export interface CallToActionBlockSelect<T extends boolean = true> {
@@ -1117,6 +1817,8 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
   id?: T;
   blockName?: T;
 }
@@ -1143,6 +1845,8 @@ export interface ContentBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
   id?: T;
   blockName?: T;
 }
@@ -1152,6 +1856,10 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  width?: T;
+  speed?: T;
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
   id?: T;
   blockName?: T;
 }
@@ -1174,9 +1882,12 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
+  title?: T;
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  theme?: T;
+  animation?: T | AnimationSettingsSelect<T>;
   id?: T;
   blockName?: T;
 }
@@ -1205,6 +1916,45 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  heroTitle?: T;
+  heroImage?: T;
+  cover?: T;
+  overviewLabel?: T;
+  overview?: T;
+  year?: T;
+  client?: T;
+  services?: T;
+  liveUrl?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        speed?: T;
+        id?: T;
+      };
+  moreTitle?: T;
+  moreProjects?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  categories?: T;
+  publishedAt?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1630,6 +2380,17 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  /**
+   * Falls back to the template logo when empty.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Status badge next to the logo, e.g. "Available May 2026".
+   */
+  availability?: {
+    enabled?: boolean | null;
+    text?: string | null;
+  };
   navItems?:
     | {
         link: {
@@ -1643,6 +2404,10 @@ export interface Header {
             | ({
                 relationTo: 'posts';
                 value: number | Post;
+              } | null)
+            | ({
+                relationTo: 'projects';
+                value: number | Project;
               } | null);
           url?: string | null;
           label: string;
@@ -1659,6 +2424,40 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  cta?: {
+    /**
+     * e.g. "Have a project in mind?"
+     */
+    eyebrow?: string | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+    };
+  };
+  /**
+   * Social links come from Site Settings.
+   */
+  showSocials?: boolean | null;
+  /**
+   * Giant wordmark at the bottom, e.g. "R*i*cky⏎Dyson".
+   */
+  wordmark?: string | null;
   navItems?:
     | {
         link: {
@@ -1672,6 +2471,10 @@ export interface Footer {
             | ({
                 relationTo: 'posts';
                 value: number | Post;
+              } | null)
+            | ({
+                relationTo: 'projects';
+                value: number | Project;
               } | null);
           url?: string | null;
           label: string;
@@ -1684,9 +2487,46 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  email?: string | null;
+  phone?: string | null;
+  /**
+   * Used by the hero, contact section and footer.
+   */
+  socials?:
+    | {
+        platform: 'facebook' | 'instagram' | 'x' | 'linkedin' | 'dribbble' | 'behance' | 'github' | 'other';
+        /**
+         * e.g. "X.com"
+         */
+        label?: string | null;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Smooth scrolling and parallax (turned off for reduced motion anyway).
+   */
+  smoothScroll?: boolean | null;
+  scrollToTop?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
+  availability?:
+    | T
+    | {
+        enabled?: T;
+        text?: T;
+      };
   navItems?:
     | T
     | {
@@ -1710,6 +2550,23 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  cta?:
+    | T
+    | {
+        eyebrow?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+      };
+  showSocials?: T;
+  wordmark?: T;
   navItems?:
     | T
     | {
@@ -1724,6 +2581,27 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  email?: T;
+  phone?: T;
+  socials?:
+    | T
+    | {
+        platform?: T;
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  smoothScroll?: T;
+  scrollToTop?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1754,6 +2632,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
         } | null);
     global?: string | null;
     user?: {

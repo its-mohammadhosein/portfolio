@@ -2,7 +2,7 @@ import type { Field, GroupField } from 'payload'
 
 import deepMerge from '@/utilities/deepMerge'
 
-export type LinkAppearances = 'default' | 'outline'
+export type LinkAppearances = 'default' | 'outline' | 'pill' | 'underline'
 
 export const appearanceOptions: Record<LinkAppearances, { label: string; value: string }> = {
   default: {
@@ -12,6 +12,16 @@ export const appearanceOptions: Record<LinkAppearances, { label: string; value: 
   outline: {
     label: 'Outline',
     value: 'outline',
+  },
+  // Dyson: pill button with the 3D label flip (FlipButton)
+  pill: {
+    label: 'Pill',
+    value: 'pill',
+  },
+  // Dyson: text link with the shrinking underline (UnderlineLink)
+  underline: {
+    label: 'Underline',
+    value: 'underline',
   },
 }
 
@@ -75,7 +85,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
         condition: (_, siblingData) => siblingData?.type === 'reference',
       },
       label: 'Document to link to',
-      relationTo: ['pages', 'posts'],
+      relationTo: ['pages', 'posts', 'projects'],
       required: true,
     },
     {
@@ -130,7 +140,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
       admin: {
         description: 'Choose how the link should be rendered.',
       },
-      defaultValue: 'default',
+      defaultValue: appearanceOptionsToUse[0]?.value,
       options: appearanceOptionsToUse,
     })
   }
