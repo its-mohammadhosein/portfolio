@@ -12,6 +12,7 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { InitMotion } from '@/motion/InitMotion'
 import { MotionProvider } from '@/motion/MotionProvider'
+import { LinesPattern } from '@/components/LinesPattern'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
@@ -56,7 +57,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <MotionProvider smooth={settings.smoothScroll ?? true}>
             {/* ScrollSmoother moves #smooth-content; fixed UI (scroll-to-top, mobile drawer via portal) stays outside */}
             <div id="smooth-wrapper">
-              <div className="flex min-h-screen flex-col" id="smooth-content">
+              <div className="relative flex min-h-screen flex-col" id="smooth-content">
+                <LinesPattern />
                 <AdminBar
                   adminBarProps={{
                     preview: isEnabled,
