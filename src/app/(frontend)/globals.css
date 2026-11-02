@@ -490,3 +490,27 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+/*
+ * Motion layer (src/motion). `motion-ready` is set before paint by InitMotion (not for reduced
+ * motion / no JS); targets stay hidden until the engine plays them and sets `data-anim-done`.
+ * These selectors mirror the engine's targets.
+ */
+.motion-ready :is([data-anim='fade'], [data-anim='fade-up']):not(section):not([data-anim-done]),
+.motion-ready section:is([data-anim='fade'], [data-anim='fade-up']):not([data-anim-done]) > *,
+.motion-ready
+  :is([data-anim='text-reveal'], [data-anim='chars']):not([data-anim-done])
+  :is(h1, h2, h3, h4, h5, h6, [data-anim-text]),
+.motion-ready
+  :is(h1, h2, h3, h4, h5, h6, [data-anim-text]):is(
+    [data-anim='text-reveal'],
+    [data-anim='chars']
+  ):not([data-anim-done]),
+.motion-ready [data-anim='stagger']:not([data-anim-done]) [data-anim-item] {
+  opacity: 0;
+}
+
+.split-word,
+.split-char {
+  display: inline-block;
+}
