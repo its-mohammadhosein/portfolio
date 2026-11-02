@@ -1,3 +1,4 @@
+import { SITE_NAME } from '@/utilities/siteName'
 import type { Metadata } from 'next'
 
 import type { Media, Page, Post, Project, Config } from '../payload-types'
@@ -26,9 +27,7 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title
-    ? doc?.meta?.title + ' | Payload Website Template'
-    : 'Payload Website Template'
+  const title = doc?.meta?.title ? doc?.meta?.title + ' | ' + SITE_NAME : SITE_NAME
 
   return {
     description: doc?.meta?.description,

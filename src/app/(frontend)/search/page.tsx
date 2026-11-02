@@ -1,3 +1,4 @@
+import { SITE_NAME } from '@/utilities/siteName'
 import { ArchiveHeading } from '@/components/ArchiveHeading'
 import type { Metadata } from 'next/types'
 
@@ -84,6 +85,6 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Search`,
+    title: `Search | ${SITE_NAME}`,
   }
 }

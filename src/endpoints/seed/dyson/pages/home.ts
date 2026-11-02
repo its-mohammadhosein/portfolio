@@ -13,7 +13,7 @@ export const seedHome = async (args: SeedArgs, projectIds: Record<string, number
     hero: { type: 'none' },
     _status: 'published',
     meta: {
-      title: 'Ricky Dyson — Artist, Designer, Creator',
+      title: 'Artist, Designer, Creator',
       description:
         'I am a passionate and experienced web designer dedicated to crafting stunning and functional digital spaces.',
     },

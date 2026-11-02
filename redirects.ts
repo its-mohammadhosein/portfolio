@@ -21,5 +21,24 @@ export const redirects: NextConfig['redirects'] = async () => {
     source: '/projects',
   }
 
-  return [internetExplorerRedirect, projectsIndexRedirect]
+  // Old WordPress shortlinks from the html base (index.html?p=N)
+  const shortlinks: Record<string, string> = {
+    '9': '/work',
+    '13': '/contact',
+    '15': '/about',
+    '17': '/projects/visual-symphony',
+    '32': '/projects/medium-scene',
+    '47': '/projects/pixel-playground',
+    '62': '/projects/the-first-brand',
+    '78': '/projects/beyond-the-screen',
+    '92': '/projects/reimagining-reality',
+  }
+  const shortlinkRedirects = Object.entries(shortlinks).map(([id, destination]) => ({
+    destination,
+    has: [{ type: 'query' as const, key: 'p', value: id }],
+    permanent: true,
+    source: '/',
+  }))
+
+  return [internetExplorerRedirect, projectsIndexRedirect, ...shortlinkRedirects]
 }
