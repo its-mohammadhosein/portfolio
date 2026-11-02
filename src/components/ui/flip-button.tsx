@@ -11,6 +11,9 @@ const flipButtonVariants = cva('flip-hover inline-flex items-center gap-[5px] tr
       pill: 'type-button rounded-pill border border-copy bg-paper px-[17px] py-[7px] text-ink',
       // footer 5ff3545 social links (no box)
       plain: 'type-button-lg text-current',
+      // project 3e4f8a86 "View Online": outlined pill
+      outline:
+        'rounded-pill border border-ink px-[30px] py-[15px] font-sans text-[1.125rem] leading-none font-medium text-ink',
     },
   },
   defaultVariants: {
