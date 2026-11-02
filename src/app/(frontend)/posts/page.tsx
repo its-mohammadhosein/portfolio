@@ -1,3 +1,4 @@
+import { ArchiveHeading } from '@/components/ArchiveHeading'
 import type { Metadata } from 'next/types'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
@@ -28,12 +29,10 @@ export default async function Page() {
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-32 pb-24 md:pt-40">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
-        </div>
+        <ArchiveHeading>Posts</ArchiveHeading>
       </div>
 
       <div className="container mb-8">

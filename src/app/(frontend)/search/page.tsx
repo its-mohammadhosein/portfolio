@@ -1,3 +1,4 @@
+import { ArchiveHeading } from '@/components/ArchiveHeading'
 import type { Metadata } from 'next/types'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
@@ -60,11 +61,11 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-32 pb-24 md:pt-40">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none text-center">
-          <h1 className="mb-8 lg:mb-16">Search</h1>
+        <div className="max-w-none text-center">
+          <ArchiveHeading className="mb-8 lg:mb-16">Search</ArchiveHeading>
 
           <div className="max-w-[50rem] mx-auto">
             <Search />
