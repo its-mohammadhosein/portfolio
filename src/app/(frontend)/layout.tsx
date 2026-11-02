@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
 import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
+import { Inter, Mona_Sans } from 'next/font/google'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
@@ -16,11 +16,30 @@ import { draftMode } from 'next/headers'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
+// Display face (headings, nav, buttons). Italic is used by `<em>` in display titles, e.g. "R<em>i</em>cky"
+const monaSans = Mona_Sans({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-mona-sans',
+  display: 'swap',
+})
+
+// Body face
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html
+      className={cn(monaSans.variable, inter.variable, GeistMono.variable)}
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

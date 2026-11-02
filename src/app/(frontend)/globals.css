@@ -44,7 +44,26 @@
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-mona-sans);
+
+  /* Dyson palette (migration/DESIGN.md §1). Names avoid the shadcn tokens (muted, primary, …) */
+  --color-ink: #000000; /* kit primary / text */
+  --color-paper: #ffffff; /* kit 81328cc */
+  --color-copy: #121212; /* paragraph text in page CSS */
+  --color-steel: #737577; /* kit secondary */
+  --color-line: #d4d6d8; /* kit accent */
+  --color-highlight: #f00000; /* .wcf--title .highlight */
+  --color-signal: #25e73d; /* contact form "sent" message */
+
+  /* Layout (kit post-119) */
+  --container-site: 1350px;
+  --spacing-gutter: 30px;
+  --radius-pill: 50px;
+
+  /* Motion (theme/plugin JS) */
+  --ease-reveal: cubic-bezier(0, 0.55, 0.45, 1); /* ≈ GSAP circ.out */
+  --ease-out-strong: cubic-bezier(0.22, 1, 0.36, 1); /* ≈ GSAP power4.out (quint) */
 }
 
 @layer utilities {
@@ -86,26 +105,27 @@
   }
 }
 
+/* Light theme mapped onto the Dyson palette so template pages (blog, search) match */
 :root {
-  --background: oklch(100% 0 0deg);
-  --foreground: oklch(14.5% 0 0deg);
+  --background: #ffffff;
+  --foreground: #121212;
   --card: oklch(96.5% 0.005 265deg);
-  --card-foreground: oklch(14.5% 0 0deg);
-  --popover: oklch(100% 0 0deg);
-  --popover-foreground: oklch(14.5% 0 0deg);
-  --primary: oklch(20.5% 0 0deg);
-  --primary-foreground: oklch(98.5% 0 0deg);
+  --card-foreground: #121212;
+  --popover: #ffffff;
+  --popover-foreground: #121212;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
   --secondary: oklch(97% 0 0deg);
-  --secondary-foreground: oklch(20.5% 0 0deg);
+  --secondary-foreground: #000000;
   --muted: oklch(97% 0 0deg);
-  --muted-foreground: oklch(55.6% 0 0deg);
+  --muted-foreground: #737577;
   --accent: oklch(97% 0 0deg);
   --accent-foreground: oklch(20.5% 0 0deg);
   --destructive: oklch(57.7% 0.245 27.325deg);
   --destructive-foreground: oklch(57.7% 0.245 27.325deg);
-  --border: oklch(92.2% 0 0deg);
-  --input: oklch(92.2% 0 0deg);
-  --ring: oklch(70.8% 0 0deg);
+  --border: #d4d6d8;
+  --input: #d4d6d8;
+  --ring: #000000;
   --chart-1: oklch(64.6% 0.222 41.116deg);
   --chart-2: oklch(60% 0.118 184.704deg);
   --chart-3: oklch(39.8% 0.07 227.392deg);
@@ -211,6 +231,254 @@
   }
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    /* master.min.css body */
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+  }
+  a {
+    transition: color 0.3s;
+  }
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+  /* One red word per title */
+  .highlight {
+    color: var(--color-highlight);
+  }
+}
+
+/*
+ * Dyson type styles (migration/DESIGN.md §2). Each sets family, weight, size, line height,
+ * tracking and case together; sizes come from the Elementor kit (post-119) unless noted.
+ * Per-element sizes from the page CSS (e.g. the 17vw hero) are set by the blocks themselves.
+ */
+@utility type-display-xxl {
+  /* kit 005dbb2 */
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 16.875vw;
+  line-height: 0.77;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+@utility type-display-xl {
+  /* kit 64baf7f */
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 7.8vw;
+  line-height: 1;
+  letter-spacing: -0.0225em;
+}
+@utility type-display-l {
+  /* kit ea8371c (family + size only) */
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 6.3rem;
+  line-height: 1;
+}
+@utility type-display-m {
+  /* kit a1ae05b */
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 5rem;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+@utility type-heading {
+  /* kit primary */
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.75rem;
+  line-height: 1.25;
+}
+@utility type-body-strong {
+  /* kit 74b9abe */
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+}
+@utility type-lead {
+  /* kit accent */
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.375rem;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+@utility type-body {
+  /* kit text */
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+@utility type-label {
+  /* kit ed79786 */
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+@utility type-small {
+  /* kit d538e05 */
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.9375rem;
+  line-height: 1.25;
+}
+@utility type-eyebrow {
+  /* footer 1a7406c "Have a project in mind?" */
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+@utility type-caption {
+  /* home 538a5bff "(Featured by)" table labels */
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1.25rem;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+@utility type-row {
+  /* home a5ec3b0 table cells; 0.85rem ≤767px */
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.85rem;
+  line-height: 1.25rem;
+  letter-spacing: -0.01em;
+  @variant md {
+    font-size: 1rem;
+  }
+}
+@utility type-nav {
+  /* header 862dccc desktop menu links */
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+@utility type-button {
+  /* footer 31dbc52 pill button */
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 0.8;
+  text-transform: uppercase;
+}
+@utility type-button-lg {
+  /* footer 5ff3545 social buttons */
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 0.8;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+@utility type-link {
+  /* home fab8a95 underline link; 1.2rem ≤767px */
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  @variant md {
+    font-size: 1.375rem;
+  }
+}
+
+/* `.wcf--title em { left: -1.1vw; position: relative }` — tightens the italic letter in display titles */
+@utility display-text {
+  margin: 0;
+  & em {
+    position: relative;
+    left: -1.1vw;
+  }
+}
+
+/*
+ * 3D text flip on hover (aae--advanced-button style-3 `.btn-text-flip`): the label rolls up and
+ * a copy from `data-text` rolls in from below.
+ */
+/* Named `flip-hover`, not `text-*`, so tailwind-merge doesn't treat it as a text colour */
+@utility flip-hover {
+  perspective: 1000px;
+  overflow: hidden;
+  isolation: isolate;
+  & > [data-text] {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.3s;
+    transform-origin: 50% 0;
+    backface-visibility: hidden;
+  }
+  & > [data-text]::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotateX(-90deg) translateZ(1px);
+    transform-origin: 50% 0;
+    text-align: center;
+    backface-visibility: hidden;
+    pointer-events: none;
+  }
+  &:hover > [data-text],
+  &:focus-visible > [data-text] {
+    transform: rotateX(90deg) translateY(-12px);
+    transform-style: preserve-3d;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    & > [data-text] {
+      transition: none;
+    }
+  }
+}
+
+/* Underline that shrinks away on hover (wcf--button `.wcf-btn-underline`, 3px in page CSS) */
+@utility link-underline {
+  position: relative;
+  padding-bottom: 5px;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background-color: currentColor;
+    transition: width 0.3s;
+  }
+  &:hover::after {
+    width: 0%;
   }
 }
 
