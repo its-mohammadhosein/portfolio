@@ -1,6 +1,7 @@
 import { Banner } from '@payloadcms/ui/elements/Banner'
 import React from 'react'
 
+import { DysonSeedButton } from './DysonSeedButton'
 import { SeedButton } from './SeedButton'
 import './index.scss'
 
@@ -14,6 +15,12 @@ const BeforeDashboard: React.FC = () => {
       </Banner>
       Here&apos;s what to do next:
       <ul className={`${baseClass}__instructions`}>
+        <li>
+          <DysonSeedButton />
+          {
+            ' with the portfolio pages, projects, header, footer and site settings (adds or updates only, safe to run again). Note: the template seed below clears pages, posts and media first.'
+          }
+        </li>
         <li>
           <SeedButton />
           {' with a few pages, posts, and projects to jump-start your new site, then '}

@@ -6,9 +6,10 @@ import type {
 } from 'payload'
 
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-const dirname = path.dirname(fileURLToPath(import.meta.url))
+// From the project root, not import.meta.url: inside a deployed route that points into the build
+// output. next.config.ts bundles this folder with the /next/seed-dyson route.
+const ASSETS_DIR = path.join(process.cwd(), 'src', 'endpoints', 'seed', 'dyson', 'assets')
 
 /** Seed writes skip Next revalidation (no server running) — pages are rebuilt/revalidated after. */
 export const seedContext = { disableRevalidate: true }
@@ -34,7 +35,7 @@ export const upsertMedia = async (
     collection: 'media',
     context: seedContext,
     data: { alt },
-    filePath: path.resolve(dirname, 'assets', filename),
+    filePath: path.join(ASSETS_DIR, filename),
     req,
   })
   return doc.id

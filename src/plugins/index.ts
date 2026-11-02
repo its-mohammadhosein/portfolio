@@ -4,6 +4,7 @@ import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { Plugin } from 'payload'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -88,5 +89,15 @@ export const plugins: Plugin[] = [
         return [...defaultFields, ...searchFields]
       },
     },
+  }),
+  // Vercel's filesystem is read-only: store media in Vercel Blob when BLOB_READ_WRITE_TOKEN is set.
+  // Files are still served through Payload at /api/media/file/*, so image URLs don't change.
+  // alwaysInsertFields keeps the schema (media._objectKey) identical with and without the token,
+  // so local migrations match production.
+  vercelBlobStorage({
+    alwaysInsertFields: true,
+    collections: { media: true },
+    enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    token: process.env.BLOB_READ_WRITE_TOKEN,
   }),
 ]

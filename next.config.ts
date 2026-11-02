@@ -44,6 +44,10 @@ const nextConfig: NextConfig = {
 
     return webpackConfig
   },
+  // The Dyson seed route reads its images/videos from disk at runtime
+  outputFileTracingIncludes: {
+    '/next/seed-dyson': ['./src/endpoints/seed/dyson/assets/**/*'],
+  },
   reactStrictMode: true,
   redirects,
   turbopack: {
