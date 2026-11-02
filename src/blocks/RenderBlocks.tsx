@@ -4,6 +4,7 @@ import type { AnimationSettings, Page } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { ContactInfoBlock } from '@/blocks/ContactInfo/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { DataTableBlock } from '@/blocks/DataTable/Component'
 import { FeatureListBlock } from '@/blocks/FeatureList/Component'
@@ -20,6 +21,7 @@ import { animAttributes } from '@/motion/attributes'
 
 const blockComponents = {
   archive: ArchiveBlock,
+  contactInfo: ContactInfoBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   dataTable: DataTableBlock,
@@ -66,7 +68,8 @@ export const RenderBlocks: React.FC<{
               // Full-width media animates itself like the Dyson blocks
               const isTemplate =
                 templateBlocks.has(blockType) &&
-                !(blockType === 'mediaBlock' && 'width' in block && block.width === 'full')
+                !(blockType === 'mediaBlock' && 'width' in block && block.width === 'full') &&
+                !(blockType === 'formBlock' && 'title' in block && block.title)
               return (
                 <Section
                   className={isTemplate ? 'py-16' : undefined}
