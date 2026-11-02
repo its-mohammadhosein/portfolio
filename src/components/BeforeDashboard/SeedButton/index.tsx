@@ -35,6 +35,14 @@ export const SeedButton: React.FC = () => {
         toast.error(`An error occurred, please refresh and try again.`)
         return
       }
+      // The template seed deletes pages, posts, media, categories and forms before seeding
+      if (
+        !window.confirm(
+          'This template seed DELETES all pages, posts, media, categories and forms (including the Dyson content) and replaces them with the Payload demo. Continue?',
+        )
+      ) {
+        return
+      }
 
       setLoading(true)
 

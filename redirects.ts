@@ -14,5 +14,12 @@ export const redirects: NextConfig['redirects'] = async () => {
     source: '/:path((?!ie-incompatible.html$).*)', // all pages except the incompatibility page
   }
 
-  return [internetExplorerRedirect]
+  // The html base has no /projects index; the project list lives on /work
+  const projectsIndexRedirect = {
+    destination: '/work',
+    permanent: true,
+    source: '/projects',
+  }
+
+  return [internetExplorerRedirect, projectsIndexRedirect]
 }

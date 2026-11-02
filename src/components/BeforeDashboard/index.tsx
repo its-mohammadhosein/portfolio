@@ -18,7 +18,7 @@ const BeforeDashboard: React.FC = () => {
         <li>
           <DysonSeedButton />
           {
-            ' with the portfolio pages, projects, header, footer and site settings (adds or updates only, safe to run again). Note: the template seed below clears pages, posts and media first.'
+            ' with the portfolio pages, projects, header, footer and site settings (adds or updates only, safe to run again). Note: the template seed below DELETES pages, posts, media, categories and forms first — do not use it on the live site.'
           }
         </li>
         <li>
