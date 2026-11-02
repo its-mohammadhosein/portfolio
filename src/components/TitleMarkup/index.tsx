@@ -45,7 +45,13 @@ export const TitleMarkup: React.FC<{
       <>
         {lines.map((line, i) => (
           <Fragment key={i}>
-            {i > 0 && <br />}
+            {/* The space keeps words apart in the text (screen readers, search) */}
+            {i > 0 && (
+              <>
+                {' '}
+                <br />
+              </>
+            )}
             {renderInline(line)}
           </Fragment>
         ))}
@@ -55,9 +61,10 @@ export const TitleMarkup: React.FC<{
   return (
     <>
       {lines.map((line, i) => (
-        <span className={lineClassName ?? 'block'} key={i}>
-          {renderInline(line)}
-        </span>
+        <Fragment key={i}>
+          {i > 0 && ' '}
+          <span className={lineClassName ?? 'block'}>{renderInline(line)}</span>
+        </Fragment>
       ))}
     </>
   )

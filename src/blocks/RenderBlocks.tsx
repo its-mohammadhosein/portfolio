@@ -5,8 +5,14 @@ import type { AnimationSettings, Page } from '@/payload-types'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { DataTableBlock } from '@/blocks/DataTable/Component'
+import { FeatureListBlock } from '@/blocks/FeatureList/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { HeroDisplayBlock } from '@/blocks/HeroDisplay/Component'
+import { MarqueeBlock } from '@/blocks/Marquee/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { PortfolioGridBlock } from '@/blocks/PortfolioGrid/Component'
+import { StatementBlock } from '@/blocks/Statement/Component'
 import { Section } from '@/components/ui/section'
 import { animAttributes } from '@/motion/attributes'
 
@@ -14,11 +20,19 @@ const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  dataTable: DataTableBlock,
+  featureList: FeatureListBlock,
   formBlock: FormBlock,
+  heroDisplay: HeroDisplayBlock,
+  marquee: MarqueeBlock,
   mediaBlock: MediaBlock,
+  portfolioGrid: PortfolioGridBlock,
+  statement: StatementBlock,
 }
 
-// Dyson blocks lay out their own spacing; template blocks keep their original vertical rhythm
+// Template blocks keep their original vertical rhythm and are animated as a whole section.
+// Dyson blocks lay out their own spacing and animate their inner elements (titles, cards…)
+// from the `animation` settings passed in, matching the html base timings.
 const templateBlocks = new Set(['archive', 'content', 'cta', 'formBlock', 'mediaBlock'])
 
 type StyledBlock = {
@@ -51,7 +65,7 @@ export const RenderBlocks: React.FC<{
                   data-block={blockType}
                   key={block.id ?? index}
                   theme={theme ?? 'light'}
-                  {...animAttributes(animation)}
+                  {...(templateBlocks.has(blockType) ? animAttributes(animation) : {})}
                 >
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />

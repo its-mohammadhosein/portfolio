@@ -49,6 +49,34 @@ export const Marquee: Block = {
         },
       ],
     },
+    {
+      name: 'layout',
+      type: 'select',
+      defaultValue: 'stacked',
+      options: [
+        { label: 'Stacked rows', value: 'stacked' },
+        { label: 'Crossed strips over a background (home)', value: 'crossed' },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'backgroundImage',
+          type: 'upload',
+          relationTo: 'media',
+          admin: { width: '70%' },
+        },
+        {
+          name: 'overlayOpacity',
+          type: 'number',
+          defaultValue: 0.75,
+          min: 0,
+          max: 1,
+          admin: { width: '30%', step: 0.05, description: 'Black overlay over the background' },
+        },
+      ],
+    },
     sectionTheme(),
   ],
 }

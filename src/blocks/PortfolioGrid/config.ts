@@ -16,6 +16,15 @@ export const PortfolioGrid: Block = {
       admin: { description: 'e.g. "Projects of years⏎©2021 — 2025"' },
     },
     {
+      name: 'layout',
+      type: 'select',
+      defaultValue: 'grid',
+      options: [
+        { label: 'Grid (Work page)', value: 'grid' },
+        { label: 'Staggered with parallax (home, 3 projects)', value: 'staggered' },
+      ],
+    },
+    {
       name: 'populateBy',
       type: 'select',
       defaultValue: 'latest',

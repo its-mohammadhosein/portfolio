@@ -56,6 +56,6 @@ export const DataTable: Block = {
         },
       },
     }),
-    blockStyle({ theme: 'dark', preset: 'text-reveal' }),
+    blockStyle({ preset: 'text-reveal' }),
   ],
 }

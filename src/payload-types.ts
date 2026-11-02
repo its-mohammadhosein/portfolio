@@ -625,8 +625,14 @@ export interface StatementBlock {
    * One line per row. *text* = italic letter(s), ==text== = red highlight.
    */
   title?: string | null;
-  titleSize?: ('heading' | 'display') | null;
+  titleSize?: ('statement' | 'large' | 'heading' | 'display') | null;
   text?: string | null;
+  align?: ('center' | 'bottomLeft') | null;
+  /**
+   * Image or video behind the section
+   */
+  backgroundMedia?: (number | null) | Media;
+  overlayOpacity?: number | null;
   enableLink?: boolean | null;
   link?: {
     type?: ('reference' | 'custom') | null;
@@ -684,6 +690,12 @@ export interface MarqueeBlock {
    * Space between items in px (20 on mobile)
    */
   gap?: number | null;
+  layout?: ('stacked' | 'crossed') | null;
+  backgroundImage?: (number | null) | Media;
+  /**
+   * Black overlay over the background
+   */
+  overlayOpacity?: number | null;
   /**
    * Section background
    */
@@ -705,6 +717,7 @@ export interface PortfolioGridBlock {
    * e.g. "Projects of years⏎©2021 — 2025"
    */
   intro?: string | null;
+  layout?: ('grid' | 'staggered') | null;
   populateBy?: ('latest' | 'category' | 'selection') | null;
   categories?: (number | Category)[] | null;
   projects?: (number | Project)[] | null;
@@ -1645,6 +1658,9 @@ export interface StatementBlockSelect<T extends boolean = true> {
   title?: T;
   titleSize?: T;
   text?: T;
+  align?: T;
+  backgroundMedia?: T;
+  overlayOpacity?: T;
   enableLink?: T;
   link?:
     | T
@@ -1675,6 +1691,9 @@ export interface MarqueeBlockSelect<T extends boolean = true> {
       };
   speed?: T;
   gap?: T;
+  layout?: T;
+  backgroundImage?: T;
+  overlayOpacity?: T;
   theme?: T;
   id?: T;
   blockName?: T;
@@ -1686,6 +1705,7 @@ export interface MarqueeBlockSelect<T extends boolean = true> {
 export interface PortfolioGridBlockSelect<T extends boolean = true> {
   title?: T;
   intro?: T;
+  layout?: T;
   populateBy?: T;
   categories?: T;
   projects?: T;

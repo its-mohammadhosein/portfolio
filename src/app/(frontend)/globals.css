@@ -523,3 +523,21 @@ html[data-theme='light'] {
 .split-char {
   display: inline-block;
 }
+
+/* Marquee strips (components/Marquee): two halves move by -50% for a seamless loop */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@utility animate-marquee {
+  animation: marquee var(--marquee-duration, 30s) linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation-play-state: paused;
+  }
+}
+@media (max-width: 767px) {
+  [style*='--marquee-gap'] {
+    --marquee-gap: 20px !important;
+  }
+}

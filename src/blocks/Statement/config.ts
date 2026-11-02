@@ -21,18 +21,48 @@ export const Statement: Block = {
     {
       name: 'titleSize',
       type: 'select',
-      defaultValue: 'heading',
+      defaultValue: 'statement',
       admin: {
         condition: (_data, siblingData) => Boolean(siblingData?.title),
       },
       options: [
-        { label: 'Statement (heading size)', value: 'heading' },
-        { label: 'Display', value: 'display' },
+        { label: 'Statement (4.5vw, uppercase)', value: 'statement' },
+        { label: 'Large (5vw, uppercase)', value: 'large' },
+        { label: 'Heading (1.75rem)', value: 'heading' },
+        { label: 'Wordmark (17vw)', value: 'display' },
       ],
     },
     {
       name: 'text',
       type: 'textarea',
+    },
+    {
+      name: 'align',
+      type: 'select',
+      defaultValue: 'center',
+      options: [
+        { label: 'Centered', value: 'center' },
+        { label: 'Bottom left (over background media)', value: 'bottomLeft' },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'backgroundMedia',
+          type: 'upload',
+          relationTo: 'media',
+          admin: { width: '70%', description: 'Image or video behind the section' },
+        },
+        {
+          name: 'overlayOpacity',
+          type: 'number',
+          defaultValue: 0.25,
+          min: 0,
+          max: 1,
+          admin: { width: '30%', step: 0.05 },
+        },
+      ],
     },
     {
       name: 'enableLink',
