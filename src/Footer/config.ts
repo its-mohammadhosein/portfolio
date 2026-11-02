@@ -49,6 +49,13 @@ export const Footer: GlobalConfig = {
       },
     }),
     {
+      name: 'credit',
+      type: 'text',
+      admin: {
+        description: 'Bottom-left line, e.g. "Designed by Treethemes."',
+      },
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [

@@ -2458,6 +2458,10 @@ export interface Footer {
    * Giant wordmark at the bottom, e.g. "R*i*cky⏎Dyson".
    */
   wordmark?: string | null;
+  /**
+   * Bottom-left line, e.g. "Designed by Treethemes."
+   */
+  credit?: string | null;
   navItems?:
     | {
         link: {
@@ -2567,6 +2571,7 @@ export interface FooterSelect<T extends boolean = true> {
       };
   showSocials?: T;
   wordmark?: T;
+  credit?: T;
   navItems?:
     | T
     | {

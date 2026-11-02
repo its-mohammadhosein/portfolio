@@ -7,12 +7,17 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import { Media } from '@/components/Media'
 import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
   data: Header
 }
 
+/**
+ * html base header (Elementor template 128): absolute overlay, logo + availability badge on the
+ * left, nav on the right; hamburger drawer at ≤1024px. Fades in on load (delay 0.15s).
+ */
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
@@ -27,14 +32,37 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   // Keep the last non-null header theme (adjusting state during render instead of in an effect)
   if (headerTheme && headerTheme !== theme) setTheme(headerTheme)
 
+  const { availability, logo } = data
+  const hasLogo = logo && typeof logo === 'object'
+
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+    <header
+      className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-[15px] text-ink data-[theme=dark]:text-paper max-md:justify-center md:px-gutter md:py-5"
+      data-anim="fade"
+      data-anim-delay="0.15"
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="flex w-1/2 items-center md:w-[85%] min-[1025px]:w-[35%]">
+        <Link aria-label="Home" className="shrink-0" href="/">
+          {hasLogo ? (
+            <Media
+              imgClassName="w-[80px] h-auto md:w-[90px] in-data-[theme=dark]:invert"
+              priority
+              resource={logo}
+              size="90px"
+            />
+          ) : (
+            <Logo className="invert dark:invert-0" loading="eager" priority="high" />
+          )}
         </Link>
-        <HeaderNav data={data} />
+        {availability?.enabled && availability.text && (
+          <p className="type-nav ml-4 hidden items-center gap-[15px] pl-[15px] md:flex">
+            <span aria-hidden className="size-[14px] shrink-0 rounded-full bg-current" />
+            {availability.text}
+          </p>
+        )}
       </div>
+      <HeaderNav data={data} />
     </header>
   )
 }

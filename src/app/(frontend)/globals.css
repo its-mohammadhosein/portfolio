@@ -277,6 +277,15 @@
   letter-spacing: -0.02em;
   text-transform: uppercase;
 }
+@utility type-wordmark {
+  /* hero 6ac8fc8 / b94fcb3, footer c4d8e7e / dddd305, work aeddfe8: the 17vw page-wide words */
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 17vw;
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
 @utility type-display-xl {
   /* kit 64baf7f */
   font-family: var(--font-display);

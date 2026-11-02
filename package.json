@@ -7,6 +7,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
     "ci": "cross-env NODE_OPTIONS=--no-deprecation payload migrate && pnpm build",
+    "seed:dyson": "cross-env NODE_OPTIONS=--no-deprecation payload run src/endpoints/seed/dyson/run.ts",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "dev:prod": "cross-env NODE_OPTIONS=--no-deprecation rm -rf .next && pnpm build && pnpm start",
