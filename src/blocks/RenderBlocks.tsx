@@ -9,6 +9,7 @@ import { DataTableBlock } from '@/blocks/DataTable/Component'
 import { FeatureListBlock } from '@/blocks/FeatureList/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { HeroDisplayBlock } from '@/blocks/HeroDisplay/Component'
+import { LabeledListsBlock } from '@/blocks/LabeledLists/Component'
 import { MarqueeBlock } from '@/blocks/Marquee/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { PageTitleBlock } from '@/blocks/PageTitle/Component'
@@ -25,6 +26,7 @@ const blockComponents = {
   featureList: FeatureListBlock,
   formBlock: FormBlock,
   heroDisplay: HeroDisplayBlock,
+  labeledLists: LabeledListsBlock,
   marquee: MarqueeBlock,
   mediaBlock: MediaBlock,
   pageTitle: PageTitleBlock,
@@ -61,13 +63,17 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               const { animation, theme } = block as StyledBlock
+              // Full-width media animates itself like the Dyson blocks
+              const isTemplate =
+                templateBlocks.has(blockType) &&
+                !(blockType === 'mediaBlock' && 'width' in block && block.width === 'full')
               return (
                 <Section
-                  className={templateBlocks.has(blockType) ? 'py-16' : undefined}
+                  className={isTemplate ? 'py-16' : undefined}
                   data-block={blockType}
                   key={block.id ?? index}
                   theme={theme ?? 'light'}
-                  {...(templateBlocks.has(blockType) ? animAttributes(animation) : {})}
+                  {...(isTemplate ? animAttributes(animation) : {})}
                 >
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />

@@ -32,6 +32,26 @@ export const MediaBlock: React.FC<Props> = (props) => {
   let caption
   if (media && typeof media === 'object') caption = media.caption
 
+  // Dyson full-width media (about video e583b6b, contact image): edge padding, optional parallax
+  if (props.width === 'full') {
+    return (
+      <div className="overflow-hidden px-6 md:px-gutter">
+        <div
+          data-anim="fade-up"
+          {...(props.speed && props.speed !== 1 ? { 'data-speed': String(props.speed) } : {})}
+        >
+          <Media
+            imgClassName="h-auto w-full"
+            resource={media}
+            size="100vw"
+            src={staticImage}
+            videoClassName="block h-auto w-full"
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn(
