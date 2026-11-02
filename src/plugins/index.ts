@@ -10,6 +10,7 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { rejectHoneypot, submissionSummaryFields } from '@/hooks/formSubmissions'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -58,6 +59,16 @@ export const plugins: Plugin[] = [
   formBuilderPlugin({
     fields: {
       payment: false,
+    },
+    // P7: no email (D3); readable submissions list + honeypot spam check
+    formSubmissionOverrides: {
+      admin: {
+        defaultColumns: ['senderName', 'senderEmail', 'form', 'createdAt'],
+      },
+      fields: ({ defaultFields }) => [...defaultFields, ...submissionSummaryFields],
+      hooks: {
+        beforeValidate: [rejectHoneypot],
+      },
     },
     formOverrides: {
       fields: ({ defaultFields }) => {

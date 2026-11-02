@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 
 import { fields } from './fields'
+import { HONEYPOT_FIELD } from './honeypot'
 import { getClientSideURL } from '@/utilities/getURL'
 
 export type FormBlockType = {
@@ -57,10 +58,18 @@ export const FormBlock: React.FC<
       const submitForm = async () => {
         setError(undefined)
 
-        const dataToSend = Object.entries(data).map(([name, value]) => ({
-          field: name,
-          value,
-        }))
+        // Honeypot filled → a bot: show success, send nothing
+        if ((data as unknown as Record<string, unknown>)[HONEYPOT_FIELD]) {
+          setHasSubmitted(true)
+          return
+        }
+
+        const dataToSend = Object.entries(data)
+          .filter(([name]) => name !== HONEYPOT_FIELD)
+          .map(([name, value]) => ({
+            field: name,
+            value,
+          }))
 
         // delay loading indicator by 1s
         loadingTimerID = setTimeout(() => {
@@ -159,12 +168,23 @@ export const FormBlock: React.FC<
       >
         <FormProvider {...formMethods}>
           {!isLoading && hasSubmitted && confirmationType === 'message' && (
-            <RichText data={confirmationMessage} />
+            // Dyson: CF7 "sent" response in green (#25E73D)
+            <div className={dyson ? 'type-lead text-signal' : undefined} role="status">
+              <RichText data={confirmationMessage} enableGutter={false} />
+            </div>
           )}
           {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
           {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
           {!hasSubmitted && (
             <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+              <input
+                aria-hidden
+                autoComplete="off"
+                className="absolute -left-[9999px] h-px w-px opacity-0"
+                tabIndex={-1}
+                type="text"
+                {...register(HONEYPOT_FIELD as never)}
+              />
               <div className="mb-4 last:mb-0">
                 {formFromProps &&
                   formFromProps.fields &&
