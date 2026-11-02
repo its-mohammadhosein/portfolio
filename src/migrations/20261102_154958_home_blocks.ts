@@ -1,5 +1,7 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
+// The new enum values can't be used as defaults in the same transaction (Postgres: "unsafe use of
+// new value"), so the title_size defaults are set in 20261102_154959_statement_title_default.
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_pages_blocks_statement_align" AS ENUM('center', 'bottomLeft');
@@ -12,9 +14,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TYPE "public"."enum_pages_blocks_statement_title_size" ADD VALUE 'large' BEFORE 'heading';
   ALTER TYPE "public"."enum__pages_v_blocks_statement_title_size" ADD VALUE 'statement' BEFORE 'heading';
   ALTER TYPE "public"."enum__pages_v_blocks_statement_title_size" ADD VALUE 'large' BEFORE 'heading';
-  ALTER TABLE "pages_blocks_statement" ALTER COLUMN "title_size" SET DEFAULT 'statement';
   ALTER TABLE "pages_blocks_data_table" ALTER COLUMN "theme" SET DEFAULT 'light';
-  ALTER TABLE "_pages_v_blocks_statement" ALTER COLUMN "title_size" SET DEFAULT 'statement';
   ALTER TABLE "_pages_v_blocks_data_table" ALTER COLUMN "theme" SET DEFAULT 'light';
   ALTER TABLE "pages_blocks_statement" ADD COLUMN "align" "enum_pages_blocks_statement_align" DEFAULT 'center';
   ALTER TABLE "pages_blocks_statement" ADD COLUMN "background_media_id" integer;
