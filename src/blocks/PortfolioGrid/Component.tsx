@@ -39,7 +39,14 @@ export const PortfolioGridBlock: React.FC<PortfolioGridBlockProps> = async ({
   const anim = animAttributes({ ...animation, preset: animation?.preset ?? 'stagger' })
 
   return (
-    <div className="overflow-hidden px-6 py-40 max-md:my-28 md:px-8 min-[1025px]:py-60">
+    <div
+      className={cn(
+        'overflow-hidden',
+        layout === 'staggered'
+          ? 'px-6 py-40 max-md:my-28 md:px-8 min-[1025px]:py-60'
+          : 'px-6 pb-24 md:px-8 md:pb-40',
+      )}
+    >
       {(title || intro) && (
         <div className="flex flex-row flex-wrap items-start justify-start overflow-hidden md:flex-nowrap">
           {title && (

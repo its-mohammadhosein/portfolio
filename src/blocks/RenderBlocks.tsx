@@ -11,6 +11,7 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { HeroDisplayBlock } from '@/blocks/HeroDisplay/Component'
 import { MarqueeBlock } from '@/blocks/Marquee/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { PageTitleBlock } from '@/blocks/PageTitle/Component'
 import { PortfolioGridBlock } from '@/blocks/PortfolioGrid/Component'
 import { StatementBlock } from '@/blocks/Statement/Component'
 import { Section } from '@/components/ui/section'
@@ -26,6 +27,7 @@ const blockComponents = {
   heroDisplay: HeroDisplayBlock,
   marquee: MarqueeBlock,
   mediaBlock: MediaBlock,
+  pageTitle: PageTitleBlock,
   portfolioGrid: PortfolioGridBlock,
   statement: StatementBlock,
 }

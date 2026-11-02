@@ -37,7 +37,7 @@ export const PortfolioTabs: React.FC<{
         )
 
   return (
-    <div className="mt-24 mb-24">
+    <div>
       {showTabs && categories.length > 0 && (
         <div
           aria-label="Filter projects"
@@ -63,7 +63,8 @@ export const PortfolioTabs: React.FC<{
           ))}
         </div>
       )}
-      <div className="grid grid-cols-1 gap-x-[30px] gap-y-16 md:grid-cols-2" {...anim}>
+      {/* .projects-grid: 2 columns, 1.875rem gap (1rem on small screens) */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-[1.875rem]" {...anim}>
         {visible.map((card) => (
           <div data-anim-item="" key={card.id}>
             <ProjectCard project={card} />

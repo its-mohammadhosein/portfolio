@@ -2,6 +2,7 @@ import type { SeedArgs } from './helpers'
 
 import { seedGlobals } from './globals'
 import { seedHome } from './pages/home'
+import { seedWork } from './pages/work'
 import { seedProjects } from './projects'
 
 /**
@@ -13,5 +14,6 @@ export const seedDyson = async (args: SeedArgs) => {
   await seedGlobals(args)
   const projectIds = await seedProjects(args)
   await seedHome(args, projectIds)
+  await seedWork(args)
   args.payload.logger.info('Dyson content seeded.')
 }
