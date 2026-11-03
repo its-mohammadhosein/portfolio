@@ -1,6 +1,7 @@
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { FlipButton } from '@/components/ui/flip-button'
 import { UnderlineLink } from '@/components/ui/underline-link'
+import { getLinkHref } from '@/utilities/getLinkHref'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
 import React from 'react'
@@ -18,7 +19,8 @@ type CMSLinkType = {
     value: Page | Post | Project | string | number
   } | null
   size?: ButtonProps['size'] | null
-  type?: 'custom' | 'reference' | null
+  type?: 'custom' | 'reference' | 'page' | null
+  page?: string | null
   url?: string | null
 }
 
@@ -30,17 +32,13 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     className,
     label,
     newTab,
+    page,
     reference,
     size: sizeFromProps,
     url,
   } = props
 
-  const href =
-    type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
-      ? `${reference?.relationTo !== 'pages' ? `/${reference?.relationTo}` : ''}/${
-          reference.value.slug
-        }`
-      : url
+  const href = getLinkHref({ type, url, reference, page })
 
   if (!href) return null
 

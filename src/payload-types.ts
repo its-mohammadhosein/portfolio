@@ -190,7 +190,7 @@ export interface Page {
     links?:
       | {
           link: {
-            type?: ('reference' | 'custom') | null;
+            type?: ('reference' | 'page' | 'custom') | null;
             newTab?: boolean | null;
             reference?:
               | ({
@@ -205,6 +205,7 @@ export interface Page {
                   relationTo: 'projects';
                   value: number | Project;
                 } | null);
+            page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
             url?: string | null;
             label: string;
             /**
@@ -645,7 +646,7 @@ export interface StatementBlock {
   overlayOpacity?: number | null;
   enableLink?: boolean | null;
   link?: {
-    type?: ('reference' | 'custom') | null;
+    type?: ('reference' | 'page' | 'custom') | null;
     newTab?: boolean | null;
     reference?:
       | ({
@@ -660,6 +661,7 @@ export interface StatementBlock {
           relationTo: 'projects';
           value: number | Project;
         } | null);
+    page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
     url?: string | null;
     label: string;
     /**
@@ -738,7 +740,7 @@ export interface PortfolioGridBlock {
   showTabs?: boolean | null;
   enableLink?: boolean | null;
   link?: {
-    type?: ('reference' | 'custom') | null;
+    type?: ('reference' | 'page' | 'custom') | null;
     newTab?: boolean | null;
     reference?:
       | ({
@@ -753,6 +755,7 @@ export interface PortfolioGridBlock {
           relationTo: 'projects';
           value: number | Project;
         } | null);
+    page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
     url?: string | null;
     label: string;
     /**
@@ -824,7 +827,7 @@ export interface DataTableBlock {
     | null;
   enableLink?: boolean | null;
   link?: {
-    type?: ('reference' | 'custom') | null;
+    type?: ('reference' | 'page' | 'custom') | null;
     newTab?: boolean | null;
     reference?:
       | ({
@@ -839,6 +842,7 @@ export interface DataTableBlock {
           relationTo: 'projects';
           value: number | Project;
         } | null);
+    page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
     url?: string | null;
     label: string;
     /**
@@ -928,7 +932,7 @@ export interface CallToActionBlock {
   links?:
     | {
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'page' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -943,6 +947,7 @@ export interface CallToActionBlock {
                 relationTo: 'projects';
                 value: number | Project;
               } | null);
+          page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
           url?: string | null;
           label: string;
           /**
@@ -987,7 +992,7 @@ export interface ContentBlock {
         } | null;
         enableLink?: boolean | null;
         link?: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'page' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -1002,6 +1007,7 @@ export interface ContentBlock {
                 relationTo: 'projects';
                 value: number | Project;
               } | null);
+          page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
           url?: string | null;
           label: string;
           /**
@@ -1577,6 +1583,7 @@ export interface PagesSelect<T extends boolean = true> {
                     type?: T;
                     newTab?: T;
                     reference?: T;
+                    page?: T;
                     url?: T;
                     label?: T;
                     appearance?: T;
@@ -1680,6 +1687,7 @@ export interface StatementBlockSelect<T extends boolean = true> {
         type?: T;
         newTab?: T;
         reference?: T;
+        page?: T;
         url?: T;
         label?: T;
         appearance?: T;
@@ -1730,6 +1738,7 @@ export interface PortfolioGridBlockSelect<T extends boolean = true> {
         type?: T;
         newTab?: T;
         reference?: T;
+        page?: T;
         url?: T;
         label?: T;
         appearance?: T;
@@ -1787,6 +1796,7 @@ export interface DataTableBlockSelect<T extends boolean = true> {
         type?: T;
         newTab?: T;
         reference?: T;
+        page?: T;
         url?: T;
         label?: T;
         appearance?: T;
@@ -1843,6 +1853,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -1871,6 +1882,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -2427,10 +2439,14 @@ export interface Header {
     enabled?: boolean | null;
     text?: string | null;
   };
+  showSearch?: boolean | null;
+  /**
+   * Header menu, in order (desktop and mobile). Use "Site page" for Home, Work, About and Contact. Empty = the html base menu.
+   */
   navItems?:
     | {
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'page' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -2445,6 +2461,7 @@ export interface Header {
                 relationTo: 'projects';
                 value: number | Project;
               } | null);
+          page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
           url?: string | null;
           label: string;
         };
@@ -2467,7 +2484,7 @@ export interface Footer {
     eyebrow?: string | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -2482,6 +2499,7 @@ export interface Footer {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
     };
@@ -2501,7 +2519,7 @@ export interface Footer {
   navItems?:
     | {
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'page' | 'custom') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -2516,6 +2534,7 @@ export interface Footer {
                 relationTo: 'projects';
                 value: number | Project;
               } | null);
+          page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
           url?: string | null;
           label: string;
         };
@@ -2615,7 +2634,7 @@ export interface HomePage {
     overlayOpacity?: number | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -2630,6 +2649,7 @@ export interface HomePage {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
       /**
@@ -2696,7 +2716,7 @@ export interface HomePage {
     showTabs?: boolean | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -2711,6 +2731,7 @@ export interface HomePage {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
       /**
@@ -2767,7 +2788,7 @@ export interface HomePage {
     overlayOpacity?: number | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -2782,6 +2803,7 @@ export interface HomePage {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
       /**
@@ -2818,7 +2840,7 @@ export interface HomePage {
       | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -2833,6 +2855,7 @@ export interface HomePage {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
       /**
@@ -2894,7 +2917,7 @@ export interface WorkPage {
     showTabs?: boolean | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -2909,6 +2932,7 @@ export interface WorkPage {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
       /**
@@ -3030,7 +3054,7 @@ export interface AboutPage {
     overlayOpacity?: number | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -3045,6 +3069,7 @@ export interface AboutPage {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
       /**
@@ -3081,7 +3106,7 @@ export interface AboutPage {
       | null;
     enableLink?: boolean | null;
     link?: {
-      type?: ('reference' | 'custom') | null;
+      type?: ('reference' | 'page' | 'custom') | null;
       newTab?: boolean | null;
       reference?:
         | ({
@@ -3096,6 +3121,7 @@ export interface AboutPage {
             relationTo: 'projects';
             value: number | Project;
           } | null);
+      page?: ('home' | 'work' | 'about' | 'contact' | 'posts' | 'search') | null;
       url?: string | null;
       label: string;
       /**
@@ -3211,6 +3237,7 @@ export interface HeaderSelect<T extends boolean = true> {
         enabled?: T;
         text?: T;
       };
+  showSearch?: T;
   navItems?:
     | T
     | {
@@ -3220,6 +3247,7 @@ export interface HeaderSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
             };
@@ -3245,6 +3273,7 @@ export interface FooterSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
             };
@@ -3261,6 +3290,7 @@ export interface FooterSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
             };
@@ -3330,6 +3360,7 @@ export interface HomePageSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -3372,6 +3403,7 @@ export interface HomePageSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -3412,6 +3444,7 @@ export interface HomePageSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -3445,6 +3478,7 @@ export interface HomePageSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -3494,6 +3528,7 @@ export interface WorkPageSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -3581,6 +3616,7 @@ export interface AboutPageSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;
@@ -3614,6 +3650,7 @@ export interface AboutPageSelect<T extends boolean = true> {
               type?: T;
               newTab?: T;
               reference?: T;
+              page?: T;
               url?: T;
               label?: T;
               appearance?: T;

@@ -53,7 +53,7 @@ const revalidate =
   ({ doc, req: { payload, context } }) => {
     if (!context.disableRevalidate) {
       payload.logger.info(`Revalidating ${path}`)
-      revalidateTag(`global_${slug}`, 'max')
+      revalidateTag(`global_${slug}`, { expire: 0 })
       revalidatePath(path)
     }
     return doc

@@ -1,6 +1,6 @@
 import type { GlobalAfterChangeHook } from 'payload'
 
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const revalidateSiteSettings: GlobalAfterChangeHook = ({
   doc,
@@ -9,7 +9,9 @@ export const revalidateSiteSettings: GlobalAfterChangeHook = ({
   if (!context.disableRevalidate) {
     payload.logger.info(`Revalidating site settings`)
 
-    revalidateTag('global_site-settings', 'max')
+    // Expire now (not stale-while-revalidate) and refresh every page: it is in the layout of all of them
+    revalidateTag('global_site-settings', { expire: 0 })
+    revalidatePath('/', 'layout')
   }
 
   return doc

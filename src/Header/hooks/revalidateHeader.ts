@@ -1,12 +1,14 @@
 import type { GlobalAfterChangeHook } from 'payload'
 
-import { revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const revalidateHeader: GlobalAfterChangeHook = ({ doc, req: { payload, context } }) => {
   if (!context.disableRevalidate) {
     payload.logger.info(`Revalidating header`)
 
-    revalidateTag('global_header', 'max')
+    // Expire now (not stale-while-revalidate) and refresh every page: it is in the layout of all of them
+    revalidateTag('global_header', { expire: 0 })
+    revalidatePath('/', 'layout')
   }
 
   return doc

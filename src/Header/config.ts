@@ -34,8 +34,15 @@ export const Header: GlobalConfig = {
       ],
     },
     {
+      name: 'showSearch',
+      type: 'checkbox',
+      defaultValue: true,
+      label: 'Show search link in the menu',
+    },
+    {
       name: 'navItems',
       type: 'array',
+      label: 'Menu',
       fields: [
         link({
           appearances: false,
@@ -43,6 +50,8 @@ export const Header: GlobalConfig = {
       ],
       maxRows: 6,
       admin: {
+        description:
+          'Header menu, in order (desktop and mobile). Use "Site page" for Home, Work, About and Contact. Empty = the html base menu.',
         initCollapsed: true,
         components: {
           RowLabel: '@/Header/RowLabel#RowLabel',

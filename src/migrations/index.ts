@@ -4,6 +4,7 @@ import * as migration_20261102_154958_home_blocks from './20261102_154958_home_b
 import * as migration_20261102_154959_statement_title_default from './20261102_154959_statement_title_default';
 import * as migration_20261102_162016_media_object_key from './20261102_162016_media_object_key';
 import * as migration_20261103_075132_fixed_pages from './20261103_075132_fixed_pages';
+import * as migration_20261103_080947_site_page_links from './20261103_080947_site_page_links';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20261103_075132_fixed_pages.up,
     down: migration_20261103_075132_fixed_pages.down,
-    name: '20261103_075132_fixed_pages'
+    name: '20261103_075132_fixed_pages',
+  },
+  {
+    up: migration_20261103_080947_site_page_links.up,
+    down: migration_20261103_080947_site_page_links.down,
+    name: '20261103_080947_site_page_links'
   },
 ];

@@ -343,11 +343,12 @@ export const siteSettingsContent = {
 export const headerContent = {
   logo: media('logo.svg', 'Ricky Dyson'),
   availability: { enabled: true, text: 'Available May 2026' },
+  showSearch: true,
   navItems: [
-    { link: { type: 'custom' as const, url: '/', label: 'Home' } },
-    { link: { type: 'custom' as const, url: '/work', label: 'Work' } },
-    { link: { type: 'custom' as const, url: '/about', label: 'About' } },
-    { link: { type: 'custom' as const, url: '/contact', label: 'Contact' } },
+    { link: { type: 'page' as const, page: 'home' as const, label: 'Home' } },
+    { link: { type: 'page' as const, page: 'work' as const, label: 'Work' } },
+    { link: { type: 'page' as const, page: 'about' as const, label: 'About' } },
+    { link: { type: 'page' as const, page: 'contact' as const, label: 'Contact' } },
   ],
 }
 
@@ -355,7 +356,7 @@ export const footerContent = {
   cta: {
     eyebrow: 'Have a project in mind?',
     enableLink: true,
-    link: { type: 'custom' as const, url: '/contact', label: "Let's Talk" },
+    link: { type: 'page' as const, page: 'contact' as const, label: "Let's Talk" },
   },
   showSocials: true,
   wordmark: 'R*i*cky\nDyson',

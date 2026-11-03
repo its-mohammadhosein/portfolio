@@ -1,7 +1,10 @@
 import type { Page, Post, Project } from '@/payload-types'
 
+import { sitePagePath } from '@/dyson/sitePages'
+
 type LinkData = {
-  type?: 'custom' | 'reference' | null
+  type?: 'custom' | 'reference' | 'page' | null
+  page?: string | null
   url?: string | null
   reference?: {
     relationTo: 'pages' | 'posts' | 'projects'
@@ -10,7 +13,8 @@ type LinkData = {
 }
 
 /** Href for a `link` field value: referenced document path, or the custom URL. */
-export const getLinkHref = ({ type, url, reference }: LinkData): string | null => {
+export const getLinkHref = ({ type, url, reference, page }: LinkData): string | null => {
+  if (type === 'page') return sitePagePath(page)
   if (type === 'reference' && typeof reference?.value === 'object' && reference.value.slug) {
     const { slug } = reference.value
     if (reference.relationTo === 'pages') return slug === 'home' ? '/' : `/${slug}`

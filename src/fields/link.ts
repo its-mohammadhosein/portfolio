@@ -1,3 +1,4 @@
+import { sitePages } from '@/dyson/sitePages'
 import type { Field, GroupField } from 'payload'
 
 import deepMerge from '@/utilities/deepMerge'
@@ -55,6 +56,11 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
                 label: 'Internal link',
                 value: 'reference',
               },
+              // Dyson: fixed routes (Home, Work, About, Contact…) have no document to reference
+              {
+                label: 'Site page',
+                value: 'page',
+              },
               {
                 label: 'Custom URL',
                 value: 'custom',
@@ -86,6 +92,16 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
       },
       label: 'Document to link to',
       relationTo: ['pages', 'posts', 'projects'],
+      required: true,
+    },
+    {
+      name: 'page',
+      type: 'select',
+      admin: {
+        condition: (_, siblingData) => siblingData?.type === 'page',
+      },
+      label: 'Page',
+      options: sitePages.map(({ label, value }) => ({ label, value })),
       required: true,
     },
     {

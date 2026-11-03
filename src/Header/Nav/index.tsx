@@ -19,9 +19,16 @@ const RollLink: React.FC<{
   label: string
   newTab?: boolean | null
   className?: string
-}> = ({ href, label, newTab, className }) => (
+  active?: boolean
+}> = ({ href, label, newTab, className, active }) => (
   <Link
-    className={cn('group relative block overflow-hidden', className)}
+    aria-current={active ? 'page' : undefined}
+    className={cn(
+      'group relative block overflow-hidden',
+      // Current page: underline in the text colour (`.menu-item a:after`)
+      active && 'after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-current',
+      className,
+    )}
     href={href}
     {...(newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {})}
   >
@@ -46,6 +53,12 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
 
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`)
+  const showSearch = data?.showSearch ?? true
+  const items = showSearch
+    ? [...navItems, { href: '/search', label: 'Search', newTab: false }]
+    : navItems
   // The drawer is portalled to <body>: fixed elements inside ScrollSmoother's transformed
   // #smooth-content would scroll with the page. Rendered after mount only (no SSR mismatch).
   const mounted = useSyncExternalStore(
@@ -83,15 +96,21 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
       <ul className="hidden items-center gap-[30px] min-[1025px]:flex">
         {navItems.map((item, i) => (
           <li className="type-nav" key={i}>
-            <RollLink {...item} />
+            <RollLink {...item} active={isActive(item.href)} />
           </li>
         ))}
-        <li>
-          <Link className="flex" href="/search">
-            <span className="sr-only">Search</span>
-            <SearchIcon aria-hidden className="size-5" />
-          </Link>
-        </li>
+        {showSearch && (
+          <li>
+            <Link
+              aria-current={isActive('/search') ? 'page' : undefined}
+              className="flex"
+              href="/search"
+            >
+              <span className="sr-only">Search</span>
+              <SearchIcon aria-hidden className="size-5" />
+            </Link>
+          </li>
+        )}
       </ul>
 
       {/* Mobile / tablet (≤1024px): hamburger + left drawer */}
@@ -138,16 +157,18 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
                 <XIcon aria-hidden className="size-[1em]" />
               </button>
               <ul className="flex flex-col">
-                {[...navItems, { href: '/search', label: 'Search', newTab: false }].map(
-                  (item, i) => (
-                    <li
-                      className="font-display text-[1.35rem] leading-[1.15] font-semibold tracking-[-0.02px] md:text-[1.25rem] md:leading-[1.5] md:tracking-[-0.01em]"
-                      key={i}
-                    >
-                      <RollLink {...item} className="pt-[15px] pl-[20px] md:pt-0" />
-                    </li>
-                  ),
-                )}
+                {items.map((item, i) => (
+                  <li
+                    className="font-display text-[1.35rem] leading-[1.15] font-semibold tracking-[-0.02px] md:text-[1.25rem] md:leading-[1.5] md:tracking-[-0.01em]"
+                    key={i}
+                  >
+                    <RollLink
+                      {...item}
+                      active={isActive(item.href)}
+                      className="pt-[15px] pl-[20px] md:pt-0"
+                    />
+                  </li>
+                ))}
               </ul>
             </div>
           </>,
