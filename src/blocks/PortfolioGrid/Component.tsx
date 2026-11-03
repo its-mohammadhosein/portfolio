@@ -65,6 +65,8 @@ export const PortfolioGridBlock: React.FC<PortfolioGridBlockProps> = async ({
         </div>
       )}
 
+      {/* Keeps the heading outline (h1 → h2 → card h3) when the grid has no visible title */}
+      {!title && <h2 className="sr-only">Projects</h2>}
       {layout === 'staggered' ? (
         <div
           className="mt-40 mb-40 flex flex-col gap-[30px] max-md:pb-20 md:flex-row md:max-[1024px]:pt-24 md:max-[1024px]:pb-16"

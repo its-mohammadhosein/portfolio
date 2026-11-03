@@ -20,7 +20,7 @@ export const LabeledListsBlock: React.FC<LabeledListsBlockProps> = ({ animation,
             {column.map((list, i) => (
               <div className="flex flex-col gap-2" key={list.id ?? i}>
                 <Caption
-                  as="h3"
+                  as="h2"
                   className="font-sans text-[0.8rem] leading-[1.25] font-semibold uppercase"
                 >
                   {list.label}

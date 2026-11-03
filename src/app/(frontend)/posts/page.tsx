@@ -59,5 +59,6 @@ export default async function Page() {
 export function generateMetadata(): Metadata {
   return {
     title: `Posts | ${SITE_NAME}`,
+    description: `Articles and notes by ${SITE_NAME}.`,
   }
 }
