@@ -44,6 +44,8 @@ const nextConfig: NextConfig = {
 
     return webpackConfig
   },
+  // Docker (Dockerfile sets NEXT_OUTPUT_STANDALONE=true); Vercel builds keep the default output
+  ...(process.env.NEXT_OUTPUT_STANDALONE === 'true' ? { output: 'standalone' as const } : {}),
   // The Dyson seed route reads its images/videos from disk at runtime
   outputFileTracingIncludes: {
     '/next/seed-dyson': ['./src/endpoints/seed/dyson/assets/**/*'],
