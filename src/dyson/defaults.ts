@@ -49,11 +49,20 @@ export const defaults = {
   siteSettings: siteSettingsContent,
 }
 
-/** A populated upload, or the fallback (missing, unpopulated or deleted media → built-in). */
-export const mediaOr = (value: unknown, fallback: Media | null | undefined): Media | null =>
-  value && typeof value === 'object' && 'url' in value && (value as Media).url
-    ? (value as Media)
-    : (fallback ?? null)
+/**
+ * A populated upload, or the fallback (missing, unpopulated or deleted media → built-in).
+ * An upload with the same filename as a built-in file is the seeded copy of it, so it is served
+ * from public/dyson (static, and still correct if the upload never reached storage). New uploads
+ * get unique filenames, so they are always served from Payload.
+ */
+export const mediaOr = (value: unknown, fallback: Media | null | undefined): Media | null => {
+  if (!(value && typeof value === 'object' && 'url' in value && (value as Media).url)) {
+    return fallback ?? null
+  }
+  const upload = value as Media
+  const builtIn = upload.filename ? dysonMedia[upload.filename as keyof typeof dysonMedia] : null
+  return builtIn ? { ...builtIn, alt: upload.alt || builtIn.alt } : upload
+}
 
 const filled = (value: unknown) =>
   Array.isArray(value) ? value.length > 0 : value !== null && value !== undefined && value !== ''
