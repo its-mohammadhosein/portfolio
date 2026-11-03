@@ -17,7 +17,12 @@ const ids = (items?: (number | { id: number })[] | null) =>
  * Portfolio grid (bb--portfolio). `staggered`: home "Work" — three cards at 50% / 25% / 25% with
  * offsets and parallax (0.9 / 0.8). `grid`: Work page, optional category tabs.
  */
-export const PortfolioGridBlock: React.FC<PortfolioGridBlockProps> = async ({
+export const PortfolioGridBlock: React.FC<
+  PortfolioGridBlockProps & {
+    /** Fixed pages pick projects by slug (works with Payload or the built-in projects) */
+    projectSlugs?: string[]
+  }
+> = async ({
   animation,
   categories,
   enableLink,
@@ -27,6 +32,7 @@ export const PortfolioGridBlock: React.FC<PortfolioGridBlockProps> = async ({
   link,
   populateBy,
   projects,
+  projectSlugs,
   showTabs,
   title,
 }) => {
@@ -34,6 +40,7 @@ export const PortfolioGridBlock: React.FC<PortfolioGridBlockProps> = async ({
     populateBy,
     categoryIds: ids(categories as (number | Category)[]),
     projectIds: ids(projects as (number | { id: number })[]),
+    projectSlugs,
     limit,
   })
   const anim = animAttributes({ ...animation, preset: animation?.preset ?? 'stagger' })

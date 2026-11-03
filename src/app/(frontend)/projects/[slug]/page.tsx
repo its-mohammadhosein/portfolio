@@ -11,6 +11,12 @@ import type { Project } from '@/payload-types'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ProjectTemplate } from '@/components/ProjectTemplate'
 import { generateMeta } from '@/utilities/generateMeta'
+import {
+  builtInMoreSlugs,
+  builtInProject,
+  builtInProjects,
+  withProjectDefaults,
+} from '@/dyson/projects'
 import { type ProjectCard, getProjectCards } from '@/utilities/getProjects'
 import PageClient from './page.client'
 
@@ -27,7 +33,12 @@ export async function generateStaticParams() {
     },
   })
 
-  return projects.docs.map(({ slug }) => ({ slug }))
+  // Payload projects + the built-in html base projects (shown when Payload doesn't have them)
+  const slugs = new Set([
+    ...projects.docs.map(({ slug }) => slug),
+    ...builtInProjects.map((p) => p.slug),
+  ])
+  return Array.from(slugs).map((slug) => ({ slug }))
 }
 
 type Args = {
@@ -42,7 +53,8 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/projects/' + decodedSlug
-  const project = await queryProjectBySlug({ slug: decodedSlug })
+  const fromPayload = await queryProjectBySlug({ slug: decodedSlug })
+  const project = fromPayload ? withProjectDefaults(fromPayload) : builtInProject(decodedSlug)
 
   if (!project) return <PayloadRedirects url={url} />
 
@@ -66,17 +78,22 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const project = await queryProjectBySlug({ slug: decodedSlug })
+  const project = (await queryProjectBySlug({ slug: decodedSlug })) ?? builtInProject(decodedSlug)
 
   return generateMeta({ doc: project })
 }
 
-/** Hand-picked "more works", or else the latest two other projects */
+/** Hand-picked "more works", else the html base picks, else the latest two other projects */
 const getMoreProjects = async (project: Project): Promise<ProjectCard[]> => {
   const picked = (project.moreProjects ?? []).filter(
     (item): item is Project => typeof item === 'object' && item !== null,
   )
-  if (picked.length) return picked
+  if (picked.length) return picked.map(withProjectDefaults)
+  const builtInPicks = builtInMoreSlugs(project.slug)
+  if (builtInPicks.length) {
+    const cards = await getProjectCards({ populateBy: 'selection', projectSlugs: builtInPicks })
+    if (cards.length) return cards
+  }
   return getProjectCards({ populateBy: 'latest', limit: 2, excludeSlug: project.slug })
 }
 

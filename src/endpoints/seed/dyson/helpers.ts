@@ -7,9 +7,9 @@ import type {
 
 import path from 'path'
 
-// From the project root, not import.meta.url: inside a deployed route that points into the build
-// output. next.config.ts bundles this folder with the /next/seed-dyson route.
-const ASSETS_DIR = path.join(process.cwd(), 'src', 'endpoints', 'seed', 'dyson', 'assets')
+// The html base images/videos live in public/dyson (also served statically as the built-in
+// defaults). Resolved from the project root: next.config.ts bundles them with the seed route.
+const ASSETS_DIR = path.join(process.cwd(), 'public', 'dyson')
 
 /** Seed writes skip Next revalidation (no server running) — pages are rebuilt/revalidated after. */
 export const seedContext = { disableRevalidate: true }

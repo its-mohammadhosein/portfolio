@@ -14,7 +14,7 @@ import { InitMotion } from '@/motion/InitMotion'
 import { MotionProvider } from '@/motion/MotionProvider'
 import { LinesPattern } from '@/components/LinesPattern'
 import { ScrollToTop } from '@/components/ScrollToTop'
-import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getSiteSettings } from '@/dyson/globals'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 
@@ -38,7 +38,7 @@ const inter = Inter({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
-  const settings = await getCachedGlobal('site-settings', 0)()
+  const settings = await getSiteSettings()
 
   return (
     <html

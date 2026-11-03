@@ -1,3 +1,4 @@
+import { getSiteSettings, withFooterDefaults } from '@/dyson/globals'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import React from 'react'
 
@@ -13,8 +14,9 @@ import { getLinkHref } from '@/utilities/getLinkHref'
  * wordmark, then the credit line and links. Stacks and centres on mobile.
  */
 export async function Footer() {
-  const footerData = await getCachedGlobal('footer', 1)()
-  const settings = await getCachedGlobal('site-settings', 0)()
+  // html base content where Payload has nothing
+  const footerData = withFooterDefaults(await getCachedGlobal('footer', 1)())
+  const settings = await getSiteSettings()
 
   const navItems = footerData?.navItems || []
   const { cta, credit, showSocials, wordmark } = footerData

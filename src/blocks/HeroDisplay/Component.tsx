@@ -1,10 +1,10 @@
+import { getSiteSettings } from '@/dyson/globals'
 import type { HeroDisplayBlock as HeroDisplayBlockProps } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 import { SocialIcons } from '@/components/SocialIcons'
 import { TitleMarkup, titleLines, titlePlainText } from '@/components/TitleMarkup'
 import { Caption } from '@/components/ui/caption'
-import { getCachedGlobal } from '@/utilities/getGlobals'
 import { cn } from '@/utilities/ui'
 import React from 'react'
 
@@ -23,7 +23,7 @@ export const HeroDisplayBlock: React.FC<HeroDisplayBlockProps> = async ({
   title,
 }) => {
   const lines = titleLines(title)
-  const settings = showSocials ? await getCachedGlobal('site-settings', 0)() : null
+  const settings = showSocials ? await getSiteSettings() : null
   const reveal = animation?.preset && animation.preset !== 'none'
   // html base: line delays 0.45 / 0.65, duration 0.7, stagger 0.1
   const lineAnim = (i: number) =>

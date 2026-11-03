@@ -1,3 +1,4 @@
+import { FIXED_PAGE_SLUGS } from '@/dyson/FixedPage'
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
@@ -27,8 +28,9 @@ export async function generateStaticParams() {
   })
 
   const params = pages.docs
+    // home/work/about/contact are fixed routes (src/app/(frontend)/<name>/page.tsx)
     ?.filter((doc) => {
-      return doc.slug !== 'home'
+      return !FIXED_PAGE_SLUGS.includes(doc.slug ?? '')
     })
     .map(({ slug }) => {
       return { slug }

@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/media/file/**',
       },
+      // Built-in html base images (src/dyson defaults)
+      {
+        pathname: '/dyson/**',
+      },
     ],
     qualities: [100],
     remotePatterns: [
@@ -48,7 +52,7 @@ const nextConfig: NextConfig = {
   ...(process.env.NEXT_OUTPUT_STANDALONE === 'true' ? { output: 'standalone' as const } : {}),
   // The Dyson seed route reads its images/videos from disk at runtime
   outputFileTracingIncludes: {
-    '/next/seed-dyson': ['./src/endpoints/seed/dyson/assets/**/*'],
+    '/next/seed-dyson': ['./public/dyson/**/*'],
   },
   reactStrictMode: true,
   redirects,

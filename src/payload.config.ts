@@ -12,6 +12,8 @@ import { Projects } from './collections/Projects'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { SiteSettings } from './globals/SiteSettings/config'
+import { dysonPageGlobals } from './globals/DysonPages'
+import { ensureContactForm } from './dyson/contactForm'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -66,7 +68,16 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Projects, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, SiteSettings],
+  globals: [Header, Footer, SiteSettings, ...dysonPageGlobals],
+  // The fixed /contact page needs its form; create it on a fresh database
+  onInit: async (payload) => {
+    try {
+      await ensureContactForm(payload)
+    } catch (error) {
+      // e.g. during `payload migrate` before the forms table exists
+      payload.logger.warn({ err: error, msg: 'Could not ensure the Contact form' })
+    }
+  },
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

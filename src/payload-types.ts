@@ -115,11 +115,19 @@ export interface Config {
     header: Header;
     footer: Footer;
     'site-settings': SiteSetting;
+    'home-page': HomePage;
+    'work-page': WorkPage;
+    'about-page': AboutPage;
+    'contact-page': ContactPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'work-page': WorkPageSelect<false> | WorkPageSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+    'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2548,6 +2556,650 @@ export interface SiteSetting {
   createdAt?: string | null;
 }
 /**
+ * Content of /. The layout is fixed in code; empty sections show the html base content.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  hero?: {
+    /**
+     * One line per row, e.g. "R*i*cky⏎Dyson". *text* = italic, ==text== = red.
+     */
+    title?: string | null;
+    image?: (number | null) | Media;
+    /**
+     * Parallax speed (1 = none)
+     */
+    imageSpeed?: number | null;
+    /**
+     * Short words around the title, e.g. Artist / Designer / Creator.
+     */
+    roles?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Shown in parentheses, e.g. "Scroll to explore".
+     */
+    caption?: string | null;
+    /**
+     * Social icons from Site Settings.
+     */
+    showSocials?: boolean | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  statement?: {
+    /**
+     * Optional label in parentheses above the title.
+     */
+    caption?: string | null;
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    titleSize?: ('statement' | 'large' | 'heading' | 'display') | null;
+    text?: string | null;
+    align?: ('center' | 'bottomLeft') | null;
+    /**
+     * Image or video behind the section
+     */
+    backgroundMedia?: (number | null) | Media;
+    overlayOpacity?: number | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('underline' | 'pill') | null;
+    };
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  marquee?: {
+    /**
+     * Each row scrolls its own word, e.g. Branding / Development / Design.
+     */
+    rows?:
+      | {
+          text: string;
+          /**
+           * Scroll right to left
+           */
+          reverse?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Milliseconds per item (html base: 5000; Benefits 9000)
+     */
+    speed?: number | null;
+    /**
+     * Space between items in px (20 on mobile)
+     */
+    gap?: number | null;
+    layout?: ('stacked' | 'crossed') | null;
+    backgroundImage?: (number | null) | Media;
+    /**
+     * Black overlay over the background
+     */
+    overlayOpacity?: number | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+  };
+  work?: {
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    /**
+     * e.g. "Projects of years⏎©2021 — 2025"
+     */
+    intro?: string | null;
+    layout?: ('grid' | 'staggered') | null;
+    populateBy?: ('latest' | 'category' | 'selection') | null;
+    categories?: (number | Category)[] | null;
+    projects?: (number | Project)[] | null;
+    limit?: number | null;
+    /**
+     * Category filter tabs (Work page)
+     */
+    showTabs?: boolean | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('underline' | 'pill') | null;
+    };
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  benefits?: {
+    /**
+     * Marquee word, e.g. "Benefits"
+     */
+    label?: string | null;
+    /**
+     * Pin the label while items scroll
+     */
+    pinned?: boolean | null;
+    items?:
+      | {
+          icon?:
+            ('none' | 'creativeExcellence' | 'professionalTeam' | 'collaborativeApproach' | 'onTimeDelivery') | null;
+          title: string;
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  reaching?: {
+    /**
+     * Optional label in parentheses above the title.
+     */
+    caption?: string | null;
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    titleSize?: ('statement' | 'large' | 'heading' | 'display') | null;
+    text?: string | null;
+    align?: ('center' | 'bottomLeft') | null;
+    /**
+     * Image or video behind the section
+     */
+    backgroundMedia?: (number | null) | Media;
+    overlayOpacity?: number | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('underline' | 'pill') | null;
+    };
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  awards?: {
+    /**
+     * e.g. "Awards /⏎Recognitions"
+     */
+    title?: string | null;
+    /**
+     * Column labels, shown in parentheses, e.g. Featured by / Award / Year
+     */
+    columns?: {
+      first?: string | null;
+      second?: string | null;
+      third?: string | null;
+    };
+    rows?:
+      | {
+          first: string;
+          second?: string | null;
+          third?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('underline' | 'pill') | null;
+    };
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Content of /work. The layout is fixed in code; empty sections show the html base content.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "work-page".
+ */
+export interface WorkPage {
+  id: number;
+  title?: {
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    size?: ('xxl' | 'xl' | 'l' | 'm') | null;
+    align?: ('left' | 'center') | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  grid?: {
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    /**
+     * e.g. "Projects of years⏎©2021 — 2025"
+     */
+    intro?: string | null;
+    layout?: ('grid' | 'staggered') | null;
+    populateBy?: ('latest' | 'category' | 'selection') | null;
+    categories?: (number | Category)[] | null;
+    projects?: (number | Project)[] | null;
+    limit?: number | null;
+    /**
+     * Category filter tabs (Work page)
+     */
+    showTabs?: boolean | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('underline' | 'pill') | null;
+    };
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Content of /about. The layout is fixed in code; empty sections show the html base content.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  title?: {
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    size?: ('xxl' | 'xl' | 'l' | 'm') | null;
+    align?: ('left' | 'center') | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  video?: {
+    media?: (number | null) | Media;
+    width?: ('container' | 'full') | null;
+    /**
+     * Parallax speed, e.g. 0.9 (empty = none)
+     */
+    speed?: number | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  lists?: {
+    lists?:
+      | {
+          /**
+           * Shown in parentheses, e.g. "Services"
+           */
+          label: string;
+          /**
+           * One entry per line.
+           */
+          entries: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Paragraph next to the lists.
+     */
+    text?: string | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  benefits?: {
+    /**
+     * Marquee word, e.g. "Benefits"
+     */
+    label?: string | null;
+    /**
+     * Pin the label while items scroll
+     */
+    pinned?: boolean | null;
+    items?:
+      | {
+          icon?:
+            ('none' | 'creativeExcellence' | 'professionalTeam' | 'collaborativeApproach' | 'onTimeDelivery') | null;
+          title: string;
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  reaching?: {
+    /**
+     * Optional label in parentheses above the title.
+     */
+    caption?: string | null;
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    titleSize?: ('statement' | 'large' | 'heading' | 'display') | null;
+    text?: string | null;
+    align?: ('center' | 'bottomLeft') | null;
+    /**
+     * Image or video behind the section
+     */
+    backgroundMedia?: (number | null) | Media;
+    overlayOpacity?: number | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('underline' | 'pill') | null;
+    };
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  experience?: {
+    /**
+     * e.g. "Awards /⏎Recognitions"
+     */
+    title?: string | null;
+    /**
+     * Column labels, shown in parentheses, e.g. Featured by / Award / Year
+     */
+    columns?: {
+      first?: string | null;
+      second?: string | null;
+      third?: string | null;
+    };
+    rows?:
+      | {
+          first: string;
+          second?: string | null;
+          third?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null)
+        | ({
+            relationTo: 'projects';
+            value: number | Project;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('underline' | 'pill') | null;
+    };
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Content of /contact. The layout is fixed in code; empty sections show the html base content.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page".
+ */
+export interface ContactPage {
+  id: number;
+  title?: {
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    size?: ('xxl' | 'xl' | 'l' | 'm') | null;
+    align?: ('left' | 'center') | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  image?: {
+    media?: (number | null) | Media;
+    width?: ('container' | 'full') | null;
+    /**
+     * Parallax speed, e.g. 0.9 (empty = none)
+     */
+    speed?: number | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  info?: {
+    /**
+     * e.g. "Have a question? Just drop me a line…"
+     */
+    text?: string | null;
+    showEmail?: boolean | null;
+    showPhone?: boolean | null;
+    showSocials?: boolean | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  form?: {
+    /**
+     * One line per row. *text* = italic letter(s), ==text== = red highlight.
+     */
+    title?: string | null;
+    form?: (number | null) | Form;
+    enableIntro?: boolean | null;
+    introContent?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Section background
+     */
+    theme?: ('light' | 'dark') | null;
+    animation?: AnimationSettings;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -2635,6 +3287,399 @@ export interface SiteSettingsSelect<T extends boolean = true> {
       };
   smoothScroll?: T;
   scrollToTop?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        imageSpeed?: T;
+        roles?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        caption?: T;
+        showSocials?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  statement?:
+    | T
+    | {
+        caption?: T;
+        title?: T;
+        titleSize?: T;
+        text?: T;
+        align?: T;
+        backgroundMedia?: T;
+        overlayOpacity?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  marquee?:
+    | T
+    | {
+        rows?:
+          | T
+          | {
+              text?: T;
+              reverse?: T;
+              id?: T;
+            };
+        speed?: T;
+        gap?: T;
+        layout?: T;
+        backgroundImage?: T;
+        overlayOpacity?: T;
+        theme?: T;
+      };
+  work?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+        layout?: T;
+        populateBy?: T;
+        categories?: T;
+        projects?: T;
+        limit?: T;
+        showTabs?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  benefits?:
+    | T
+    | {
+        label?: T;
+        pinned?: T;
+        items?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              text?: T;
+              id?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  reaching?:
+    | T
+    | {
+        caption?: T;
+        title?: T;
+        titleSize?: T;
+        text?: T;
+        align?: T;
+        backgroundMedia?: T;
+        overlayOpacity?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  awards?:
+    | T
+    | {
+        title?: T;
+        columns?:
+          | T
+          | {
+              first?: T;
+              second?: T;
+              third?: T;
+            };
+        rows?:
+          | T
+          | {
+              first?: T;
+              second?: T;
+              third?: T;
+              id?: T;
+            };
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "work-page_select".
+ */
+export interface WorkPageSelect<T extends boolean = true> {
+  title?:
+    | T
+    | {
+        title?: T;
+        size?: T;
+        align?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  grid?:
+    | T
+    | {
+        title?: T;
+        intro?: T;
+        layout?: T;
+        populateBy?: T;
+        categories?: T;
+        projects?: T;
+        limit?: T;
+        showTabs?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  title?:
+    | T
+    | {
+        title?: T;
+        size?: T;
+        align?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  video?:
+    | T
+    | {
+        media?: T;
+        width?: T;
+        speed?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  lists?:
+    | T
+    | {
+        lists?:
+          | T
+          | {
+              label?: T;
+              entries?: T;
+              id?: T;
+            };
+        text?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  benefits?:
+    | T
+    | {
+        label?: T;
+        pinned?: T;
+        items?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              text?: T;
+              id?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  reaching?:
+    | T
+    | {
+        caption?: T;
+        title?: T;
+        titleSize?: T;
+        text?: T;
+        align?: T;
+        backgroundMedia?: T;
+        overlayOpacity?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  experience?:
+    | T
+    | {
+        title?: T;
+        columns?:
+          | T
+          | {
+              first?: T;
+              second?: T;
+              third?: T;
+            };
+        rows?:
+          | T
+          | {
+              first?: T;
+              second?: T;
+              third?: T;
+              id?: T;
+            };
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  title?:
+    | T
+    | {
+        title?: T;
+        size?: T;
+        align?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  image?:
+    | T
+    | {
+        media?: T;
+        width?: T;
+        speed?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  info?:
+    | T
+    | {
+        text?: T;
+        showEmail?: T;
+        showPhone?: T;
+        showSocials?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  form?:
+    | T
+    | {
+        title?: T;
+        form?: T;
+        enableIntro?: T;
+        introContent?: T;
+        theme?: T;
+        animation?: T | AnimationSettingsSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -1,7 +1,7 @@
+import { getSiteSettings } from '@/dyson/globals'
 import type { ContactInfoBlock as ContactInfoBlockProps } from '@/payload-types'
 
 import { SocialIcons } from '@/components/SocialIcons'
-import { getCachedGlobal } from '@/utilities/getGlobals'
 import React from 'react'
 
 /** Bottom-border link that thickens on hover (`.link-border-dark a`: box-shadow 0 1px → 0 5px). */
@@ -28,7 +28,7 @@ export const ContactInfoBlock: React.FC<ContactInfoBlockProps> = async ({
   showSocials,
   text,
 }) => {
-  const settings = await getCachedGlobal('site-settings', 0)()
+  const settings = await getSiteSettings()
   const reveal = animation?.preset && animation.preset !== 'none'
 
   return (
